@@ -1,15 +1,18 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace SaveNScore.Models
 {
     public class Budget
     {
-        public int BudgetId { get; set; }
-        public int CustomerId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public decimal StartAmount { get; set; }
+
+        public int CustomerID { get; set; }
+        public int BudgetID { get; set; }
+        public decimal StartAmount { get; set;}
         public decimal RemainingAmount { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set;}
     }
 }
