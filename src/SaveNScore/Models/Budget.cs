@@ -7,6 +7,7 @@ namespace SaveNScore.Models
 {
     public class Budget
     {
+
         public int CustomerID { get; set; }
         public int BudgetID { get; set; }
         public decimal StartAmount { get; set;}

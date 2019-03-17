@@ -19,8 +19,8 @@ namespace SaveNScore
             //alternate routing method (instead of attribute route)
             //routes.MapRoute(
             //    "TransactionsByDate",
-            //    "Transactions/ByTransDate/{year}/{month}/{day}",
-            //    new { controller = "Transactions", action = "ByTransDate"}
+            //    "CustomerTransactions/ByTransDate/{year}/{month}/{day}",
+            //    new { controller = "CustomerTransactions", action = "ByTransDate"}
             //    new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
             //);
 
