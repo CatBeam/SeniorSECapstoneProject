@@ -33,5 +33,7 @@ namespace SaveNScore.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<SaveNScore.Models.Budget> Budgets { get; set; }
     }
 }
