@@ -8,9 +8,9 @@ using SaveNScore.ViewModels;
 
 namespace SaveNScore.Controllers
 {
-    public class TransactionsController : Controller
+    public class CustomerTransactionsController : Controller
     {
-        // GET: Transactions
+        // GET: CustomerTransactions
         public ActionResult Index(int? pageIndex, string sortBy)
         {
             if (pageIndex.HasValue)
@@ -22,7 +22,7 @@ namespace SaveNScore.Controllers
             return Content(string.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }
 
-        [Route("Transactions/ByTransDate/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1, 12)}/{day:regex(\\d{2}):range(1, 31)}")]
+        [Route("CustomerTransactions/ByTransDate/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1, 12)}/{day:regex(\\d{2}):range(1, 31)}")]
 
         public ActionResult ByTransDate(int year, int month, int day)
         {
@@ -35,16 +35,16 @@ namespace SaveNScore.Controllers
         {
             var user = new CustomersController().CurrentCustomer();
 
-            var transactions = new List<Transaction>
+            var transactions = new List<CustomerTransaction>
             {
-                new Transaction {AccountNum = 1, Amount = 14.99, Date = DateTime.Now, Type = TransTypeEnum.Debit},
-                new Transaction {AccountNum = 1, Amount = 20.00, Date = DateTime.Now, Type = TransTypeEnum.Credit}
+                new CustomerTransaction {AccountNum = 1, Amount = 14.99, Date = DateTime.Now, Type = TransTypeEnum.Debit},
+                new CustomerTransaction {AccountNum = 1, Amount = 20.00, Date = DateTime.Now, Type = TransTypeEnum.Credit}
             };
 
-            var viewModel = new TransactionListViewModel
+            var viewModel = new CustomerTransactionListViewModel
             {
                 Customer = user,
-                Transactions = transactions
+                CustomerTransactions = transactions
             };
 
             return View(viewModel);

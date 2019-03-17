@@ -2,7 +2,7 @@
 
 namespace SaveNScore.Models
 {
-    public class Transaction
+    public class CustomerTransaction
     {
         public int Id { get; set; }
         public int AccountNum { get; set; }

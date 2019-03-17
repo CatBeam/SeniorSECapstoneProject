@@ -52,7 +52,7 @@ namespace SaveNScore.Migrations
                 .Index(t => t.RoleId);
             
             CreateTable(
-                "dbo.Transactions",
+                "dbo.CustomerTransactions",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -128,7 +128,7 @@ namespace SaveNScore.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.Transactions");
+            DropTable("dbo.CustomerTransactions");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Customers");
