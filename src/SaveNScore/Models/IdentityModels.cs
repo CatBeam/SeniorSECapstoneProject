@@ -31,6 +31,7 @@ namespace SaveNScore.Models
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerAccount> CustomerAccounts { get; set; }
         public DbSet<CustomerTransaction> Transactions { get; set; }
+        public DbSet<Budget> Budgets { get; set }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
