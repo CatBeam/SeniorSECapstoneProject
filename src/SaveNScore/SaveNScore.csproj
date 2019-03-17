@@ -186,6 +186,7 @@
       <DependentUpon>201903161927154_InitialModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
     <Compile Include="Models\CustomerAccountTypeEnum.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
