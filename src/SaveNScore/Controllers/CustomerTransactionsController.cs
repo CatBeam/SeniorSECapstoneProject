@@ -31,7 +31,7 @@ namespace SaveNScore.Controllers
             return Content(year + "/" + month + "/" + day);
         }
 
-        public ActionResult _TransactionList()
+        public ActionResult _CustomerTransactionList()
         {
             var user = new CustomersController().CurrentCustomer();
 
