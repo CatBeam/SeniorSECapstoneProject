@@ -1,25 +1,16 @@
 ﻿@model IEnumerable<SaveNScore.Models.Budget>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Budgets";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Customer Budgets</h2>
-
+<h2>Budgets</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CustomerID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.BudgetID)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.StartAmount)
@@ -27,20 +18,19 @@
         <th>
             @Html.DisplayNameFor(model => model.RemainingAmount)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
         <th></th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @Html.DisplayFor(modelItem => item.BudgetID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartAmount)
@@ -49,10 +39,16 @@
                 @Html.DisplayFor(modelItem => item.RemainingAmount)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.BudgetID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.BudgetID }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.BudgetID })
             </td>
         </tr>
     }
-
 </table>

@@ -283,6 +283,8 @@
     <Content Include="Views\Customers\_DisplayCurrentCustomer.cshtml" />
     <Content Include="Views\Budget\Index.cshtml" />
     <Content Include="Views\Budget\Create.cshtml" />
+    <Content Include="Views\Budget\Details.cshtml" />
+    <Content Include="Views\Budget\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
