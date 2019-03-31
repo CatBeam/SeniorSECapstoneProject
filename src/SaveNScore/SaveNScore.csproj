@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44384</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201903172244071_Iteration2.Designer.cs">
       <DependentUpon>201903172244071_Iteration2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903311855094_SeedAdmin.cs" />
+    <Compile Include="Migrations\201903311855094_SeedAdmin.Designer.cs">
+      <DependentUpon>201903311855094_SeedAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
@@ -216,6 +220,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\CustomerTransaction.cs" />
     <Compile Include="Models\CustomerTransactionListViewModel.cs" />
+    <Compile Include="Models\RoleNames.cs" />
     <Compile Include="Models\TransTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -285,6 +290,7 @@
     <Content Include="Views\Budget\Create.cshtml" />
     <Content Include="Views\Budget\Details.cshtml" />
     <Content Include="Views\Budget\Edit.cshtml" />
+    <Content Include="Views\Shared\_BudgetPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -321,6 +327,9 @@
     <EmbeddedResource Include="Migrations\201903172244071_Iteration2.resx">
       <DependentUpon>201903172244071_Iteration2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903311855094_SeedAdmin.resx">
+      <DependentUpon>201903311855094_SeedAdmin.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -340,7 +349,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>6784</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:6784/</IISUrl>
+          <IISUrl>https://localhost:44384/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

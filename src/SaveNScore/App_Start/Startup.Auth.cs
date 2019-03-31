@@ -54,9 +54,9 @@ namespace SaveNScore
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "866943036984349",
+               appSecret: "38fc26f98dc865a91afefc1998e7c6bd");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
