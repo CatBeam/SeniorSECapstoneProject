@@ -37,8 +37,8 @@ namespace SaveNScore.Controllers
 
             var transactions = new List<CustomerTransaction>
             {
-                new CustomerTransaction {AccountNum = 1, Amount = 14.99, Date = DateTime.Now, Type = TransTypeEnum.Debit},
-                new CustomerTransaction {AccountNum = 1, Amount = 20.00, Date = DateTime.Now, Type = TransTypeEnum.Credit}
+                new CustomerTransaction {AccountNum = "1", Amount = 14.99, Date = DateTime.Now, Type = TransTypeEnum.Debit},
+                new CustomerTransaction {AccountNum = "1", Amount = 20.00, Date = DateTime.Now, Type = TransTypeEnum.Credit}
             };
 
             var viewModel = new CustomerTransactionListViewModel

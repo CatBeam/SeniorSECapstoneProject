@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -52,6 +55,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -210,6 +216,22 @@
     <Compile Include="Migrations\201903311855094_SeedAdmin.Designer.cs">
       <DependentUpon>201903311855094_SeedAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904061712012_SeedAccounts.cs" />
+    <Compile Include="Migrations\201904061712012_SeedAccounts.Designer.cs">
+      <DependentUpon>201904061712012_SeedAccounts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904061833309_AddTransDescription.cs" />
+    <Compile Include="Migrations\201904061833309_AddTransDescription.Designer.cs">
+      <DependentUpon>201904061833309_AddTransDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904061848177_AccountNumToString.cs" />
+    <Compile Include="Migrations\201904061848177_AccountNumToString.Designer.cs">
+      <DependentUpon>201904061848177_AccountNumToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904061850182_SeedTransactions.cs" />
+    <Compile Include="Migrations\201904061850182_SeedTransactions.Designer.cs">
+      <DependentUpon>201904061850182_SeedTransactions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
@@ -236,6 +258,16 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EmbeddedResource Include="Migrations\201904061833309_AddTransDescription.resx">
+      <DependentUpon>201904061833309_AddTransDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Domain\SeedData\Transactions.csv" />
+    <EmbeddedResource Include="Migrations\201904061848177_AccountNumToString.resx">
+      <DependentUpon>201904061848177_AccountNumToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904061850182_SeedTransactions.resx">
+      <DependentUpon>201904061850182_SeedTransactions.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -329,6 +361,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903311855094_SeedAdmin.resx">
       <DependentUpon>201903311855094_SeedAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904061712012_SeedAccounts.resx">
+      <DependentUpon>201904061712012_SeedAccounts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
