@@ -8,7 +8,7 @@ namespace SaveNScore.ViewModels
 {
     public class CustomerTransactionListViewModel
     {
-        public Customer Customer { get; set; }
+        public ApplicationUser User { get; set; }
         public List<CustomerTransaction> CustomerTransactions { get; set; }
     }
 }
