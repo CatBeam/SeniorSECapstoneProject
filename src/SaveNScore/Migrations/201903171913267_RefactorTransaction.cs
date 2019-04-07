@@ -7,12 +7,12 @@ namespace SaveNScore.Migrations
     {
         public override void Up()
         {
-            RenameTable(name: "dbo.Transactions", newName: "CustomerTransactions");
+            //RenameTable(name: "dbo.Transactions", newName: "CustomerTransactions");
         }
         
         public override void Down()
         {
-            RenameTable(name: "dbo.CustomerTransactions", newName: "Transactions");
+            //RenameTable(name: "dbo.CustomerTransactions", newName: "Transactions");
         }
     }
 }

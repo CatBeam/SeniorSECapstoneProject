@@ -181,6 +181,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
+    <Compile Include="Controllers\GoalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\CustomerTransactionsController.cs" />
@@ -232,12 +233,17 @@
     <Compile Include="Migrations\201904061850182_SeedTransactions.Designer.cs">
       <DependentUpon>201904061850182_SeedTransactions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904071837117_Goals.cs" />
+    <Compile Include="Migrations\201904071837117_Goals.Designer.cs">
+      <DependentUpon>201904071837117_Goals.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
     <Compile Include="Models\CustomerAccountTypeEnum.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\CustomerTransaction.cs" />
@@ -267,6 +273,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904061850182_SeedTransactions.resx">
       <DependentUpon>201904061850182_SeedTransactions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904071837117_Goals.resx">
+      <DependentUpon>201904071837117_Goals.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -323,6 +332,11 @@
     <Content Include="Views\Budget\Details.cshtml" />
     <Content Include="Views\Budget\Edit.cshtml" />
     <Content Include="Views\Shared\_BudgetPartial.cshtml" />
+    <Content Include="Views\Goal\Index.cshtml" />
+    <Content Include="Views\Goal\Details.cshtml" />
+    <Content Include="Views\Goal\Create.cshtml" />
+    <Content Include="Views\Goal\Edit.cshtml" />
+    <Content Include="Views\Shared\_GoalPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

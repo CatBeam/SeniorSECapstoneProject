@@ -33,6 +33,8 @@ namespace SaveNScore.Models
         public DbSet<CustomerTransaction> Transactions { get; set; }
         public DbSet<Budget> Budgets { get; set; }
 
+        public DbSet<Goal> Goals { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
