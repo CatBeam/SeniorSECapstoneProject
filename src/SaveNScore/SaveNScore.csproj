@@ -180,6 +180,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AchievementController.cs" />
     <Compile Include="Controllers\ApplicationBaseController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\GoalController.cs" />
@@ -238,7 +239,12 @@
     <Compile Include="Migrations\201904071837117_Goals.Designer.cs">
       <DependentUpon>201904071837117_Goals.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904071920344_AchievementsAlterBudget.cs" />
+    <Compile Include="Migrations\201904071920344_AchievementsAlterBudget.Designer.cs">
+      <DependentUpon>201904071920344_AchievementsAlterBudget.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Achievement.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
     <Compile Include="Models\CustomerAccountTypeEnum.cs" />
@@ -277,6 +283,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904071837117_Goals.resx">
       <DependentUpon>201904071837117_Goals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904071920344_AchievementsAlterBudget.resx">
+      <DependentUpon>201904071920344_AchievementsAlterBudget.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -338,6 +347,7 @@
     <Content Include="Views\Goal\Create.cshtml" />
     <Content Include="Views\Goal\Edit.cshtml" />
     <Content Include="Views\Shared\_GoalPartial.cshtml" />
+    <Content Include="Views\Achievement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

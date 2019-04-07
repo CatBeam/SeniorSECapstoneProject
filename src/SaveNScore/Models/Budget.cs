@@ -32,5 +32,8 @@ namespace SaveNScore.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DisplayName("End Date")]
         public DateTime EndDate { get; set;}
+
+        [DisplayName("Description")]
+        public string BudgetDescription { get; set; }
     }
 }
