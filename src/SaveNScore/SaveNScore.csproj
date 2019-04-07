@@ -243,13 +243,16 @@
     <Compile Include="Migrations\201904071920344_AchievementsAlterBudget.Designer.cs">
       <DependentUpon>201904071920344_AchievementsAlterBudget.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904072157161_AccountJointPrimaryKey.cs" />
+    <Compile Include="Migrations\201904072157161_AccountJointPrimaryKey.Designer.cs">
+      <DependentUpon>201904072157161_AccountJointPrimaryKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Achievement.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\CustomerAccount.cs" />
     <Compile Include="Models\CustomerAccountTypeEnum.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -286,6 +289,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904071920344_AchievementsAlterBudget.resx">
       <DependentUpon>201904071920344_AchievementsAlterBudget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904072157161_AccountJointPrimaryKey.resx">
+      <DependentUpon>201904072157161_AccountJointPrimaryKey.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
