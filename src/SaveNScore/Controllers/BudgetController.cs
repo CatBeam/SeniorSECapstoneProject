@@ -12,13 +12,16 @@ namespace SaveNScore.Controllers
 {
     public class BudgetController : Controller
     {
+        //Make Db Instance
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Budget
         public async Task<ActionResult> Index()
         {
             //var budgets = db.Budgets.Include(b => b.PrimaryHolder);
+            //Make Budget Table instance
             var budgets = db.Budgets;
+            //search ID Code Here
             return View(await budgets.ToListAsync());
         }
 
