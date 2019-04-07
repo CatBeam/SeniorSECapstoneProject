@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using SaveNScore.Models;
 using SaveNScore.ViewModels;
 
 namespace SaveNScore.Controllers
 {
-    public class CustomerTransactionsController : Controller
+    public class CustomerTransactionsController : ApplicationBaseController
     {
         // GET: CustomerTransactions
         public ActionResult Index(int? pageIndex, string sortBy)
@@ -33,7 +35,7 @@ namespace SaveNScore.Controllers
 
         public ActionResult _CustomerTransactionList()
         {
-            var user = new CustomersController().CurrentCustomer();
+            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
             var transactions = new List<CustomerTransaction>
             {
@@ -43,7 +45,7 @@ namespace SaveNScore.Controllers
 
             var viewModel = new CustomerTransactionListViewModel
             {
-                Customer = user,
+                User = user,
                 CustomerTransactions = transactions
             };
 

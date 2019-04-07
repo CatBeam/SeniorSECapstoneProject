@@ -1,18 +1,25 @@
-﻿@model SaveNScore.ViewModels.CustomerTransactionListViewModel
+﻿@using Microsoft.AspNet.Identity
+@model SaveNScore.ViewModels.CustomerTransactionListViewModel
 
-<h2>@Model.Customer.FirstName @Model.Customer.LastName</h2>
+@if (Request.IsAuthenticated && ViewData.ContainsKey("FullName"))
+{
+    <h2>@(ViewData["FullName"])'s Transactions</h2>
 
-@if (Model.CustomerTransactions.Count == 0)
-{
-    <p>No transactions during the specified period.</p>
+
+
+    if (Model.CustomerTransactions.Count == 0)
+    {
+        <p>No transactions during the specified period.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var customerTransaction in Model.CustomerTransactions)
+            {
+                // TODO: add css classes transaction-Debit and transaction-Credit
+                <li class="transaction-@customerTransaction.Type">@customerTransaction.Type @customerTransaction.Amount @customerTransaction.Date.Day @customerTransaction.Date.Month @customerTransaction.Date.Year</li>
+            }
+        </ul>
+    }
 }
-else
-{
-    <ul>
-        @foreach (var customerTransaction in Model.CustomerTransactions)
-        {
-            // TODO: add css classes transaction-Debit and transaction-Credit
-            <li class="transaction-@customerTransaction.Type">@customerTransaction.Type @customerTransaction.Amount @customerTransaction.Date.Day @customerTransaction.Date.Month @customerTransaction.Date.Year</li>
-        }
-    </ul>  
-}
+
