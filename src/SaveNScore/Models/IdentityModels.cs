@@ -34,6 +34,7 @@ namespace SaveNScore.Models
         public DbSet<Budget> Budgets { get; set; }
 
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<Achievement> Achievements {get;set;}
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
