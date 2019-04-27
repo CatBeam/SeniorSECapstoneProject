@@ -2,8 +2,8 @@
 {
     using System;
     using System.Data.Entity.Migrations;
-    
-    public partial class seedTransactions : DbMigration
+
+    public partial class transactionSeed : DbMigration
     {
         public override void Up()
         {
@@ -290,7 +290,7 @@
                 SET IDENTITY_INSERT [dbo].[CustomerTransactions] OFF
                 ");
         }
-        
+
         public override void Down()
         {
         }

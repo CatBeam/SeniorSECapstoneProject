@@ -7,13 +7,13 @@ namespace SaveNScore.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class seedTransactions : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(seedTransactions));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904271935434_seedTransactions"; }
+            get { return "201904272219572_init"; }
         }
         
         string IMigrationMetadata.Source

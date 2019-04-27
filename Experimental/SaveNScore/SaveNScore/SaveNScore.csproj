@@ -182,13 +182,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904271935158_init.cs" />
-    <Compile Include="Migrations\201904271935158_init.Designer.cs">
-      <DependentUpon>201904271935158_init.cs</DependentUpon>
+    <Compile Include="Migrations\201904272219572_init.cs" />
+    <Compile Include="Migrations\201904272219572_init.Designer.cs">
+      <DependentUpon>201904272219572_init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904271935434_seedTransactions.cs" />
-    <Compile Include="Migrations\201904271935434_seedTransactions.Designer.cs">
-      <DependentUpon>201904271935434_seedTransactions.cs</DependentUpon>
+    <Compile Include="Migrations\201904272221451_identitySeed.cs" />
+    <Compile Include="Migrations\201904272221451_identitySeed.Designer.cs">
+      <DependentUpon>201904272221451_identitySeed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904272222162_accountSeed.cs" />
+    <Compile Include="Migrations\201904272222162_accountSeed.Designer.cs">
+      <DependentUpon>201904272222162_accountSeed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904272230207_transactionSeed.cs" />
+    <Compile Include="Migrations\201904272230207_transactionSeed.Designer.cs">
+      <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Achievement.cs" />
@@ -296,11 +304,17 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904271935158_init.resx">
-      <DependentUpon>201904271935158_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904272219572_init.resx">
+      <DependentUpon>201904272219572_init.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904271935434_seedTransactions.resx">
-      <DependentUpon>201904271935434_seedTransactions.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904272221451_identitySeed.resx">
+      <DependentUpon>201904272221451_identitySeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904272222162_accountSeed.resx">
+      <DependentUpon>201904272222162_accountSeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904272230207_transactionSeed.resx">
+      <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
