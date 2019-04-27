@@ -34,16 +34,10 @@ namespace SaveNScore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "GoalType, GoalPeriod,StartDate,StartValue,LimitValue,Description")] Goal userGoal)
+        public async Task<ActionResult> Create([Bind(Include = "GoalType, GoalPeriod,StartDate,EndDate,StartValue,LimitValue,Description")] Goal userGoal)
         {
             if (ModelState.IsValid)
             {
-
-                //THE NEXT TWO STATEMENTS ARE FOR TESTING, AND SHOULD BE ERASED
-                //ONCE THE DB AUTO INC'S GoalID
-                Random random = new Random();
-                userGoal.GoalID = random.Next(0, Int32.MaxValue - 1);
-
                 //Tie new goal to UserID, Add to DB, and Save
                 String uid = User.Identity.GetUserId().ToString();
                 userGoal.UserID = uid;
