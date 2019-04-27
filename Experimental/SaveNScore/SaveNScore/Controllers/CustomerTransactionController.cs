@@ -23,13 +23,38 @@ namespace SaveNScore.Controllers
         {
             //Create DB CustomerTransactions Table Instance
             //Order table by Processing Date
-            var customerTrans = db.CustomerTransactions.OrderBy(d => d.TransactionDate); ;
+            var customerTrans = db.CustomerTransactions.OrderBy(d => d.TransactionDate);
+            
             
             //QUERY: Get all CustomerTransactions tied to this UserID
             var uid = User.Identity.GetUserId();
-            var userTransactions = customerTrans.Where(u => u.UserID == uid);
+            var customerAcc = db.CustomersAccounts.Where(u => u.UserID == uid);
+            List<CustomerAccount> caList = await customerAcc.ToListAsync();
 
-            return View(await userTransactions.ToListAsync());
+            List<string> caListStrings = new List<string>();
+            foreach(var account in caList)
+            {
+                caListStrings.Add(account.AccountNum);
+            }
+
+            //var tempS = "";
+            List<CustomerTransaction> ctList = new List<CustomerTransaction>();
+            foreach(var accNum in caListStrings)
+            {
+                var cTrans = db.CustomerTransactions.Where(a => a.AccountNum == accNum);
+                List<CustomerTransaction> tempList = await cTrans.ToListAsync();
+                ctList.Concat(tempList);
+                //tempS = accNum;
+            }
+
+            //var temp = db.CustomerTransactions.Where(a => a.AccountNum == tempS);
+
+            /*
+            var userTransactions = customerTrans.Where(u => u.UserID == uid).OrderBy(d => d.TransactionDate);
+
+            List<CustomerTransaction> ctList = await userTransactions.ToListAsync();
+            */
+            return View(ctList);
         }
 
         public ActionResult Create()
@@ -45,6 +70,7 @@ namespace SaveNScore.Controllers
             //Create Entry, Save DB changes
             if(ModelState.IsValid)
             {
+                /* MESSED UP BY NO LONGER HAVING USERID
                 var uid = User.Identity.GetUserId();
                 ctrans.UserID = uid.ToString();
                 ctrans.TransactionDate = DateTime.Now;
@@ -60,6 +86,7 @@ namespace SaveNScore.Controllers
                 //STUB: Add Logic updating whichever account the transaction is applied to here.
 
                 await db.SaveChangesAsync();
+                */
                 return RedirectToAction("Index", "CustomerTransaction");
             }
 

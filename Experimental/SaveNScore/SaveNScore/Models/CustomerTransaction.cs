@@ -11,8 +11,6 @@ namespace SaveNScore.Models
     public class CustomerTransaction
     {
 
-        public string UserID { get; set; }
-
         [Key]
         [Editable(false)]
         public int TransactionID { get; set; }

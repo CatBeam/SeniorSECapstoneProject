@@ -24,6 +24,8 @@ namespace SaveNScore.Models
         //[ForeignKey("CustomerAccount")]
         public string UserID { get; set; }
 
+
+        public string AccountNum { get; set; }
         [Key]
         public int GoalID { get; set; }
 
