@@ -111,6 +111,20 @@ namespace SaveNScore.Controllers
             return RedirectToAction("Index", "CustomerAccount");
         }
 
+        public async Task<ActionResult> Details(String id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //Find all Transactions matching the account number (id)
+            var ctList = db.CustomerTransactions.Where(a => a.AccountNum == id);
+
+            //Return as a list
+            return View(await ctList.ToListAsync());
+        }
+
         
         protected override void Dispose(bool disposing)
         {
