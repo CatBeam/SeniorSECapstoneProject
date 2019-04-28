@@ -7,8 +7,9 @@ using System.Web.Mvc;
 using SaveNScore.Models;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
-using SaveNScore.Models;
 using System.Net;
+using SaveNScore.ViewModels;
+using Newtonsoft.Json;
 
 namespace SaveNScore.Controllers
 {
@@ -191,6 +192,75 @@ namespace SaveNScore.Controllers
             }
             base.Dispose(disposing);
         }
-        
+
+        public async Task<ActionResult> AccountDetails(String id)
+        {
+            var model = new AccountDetailsViewModel();
+
+            //if (String.IsNullOrEmpty(id))
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+
+            //Find all Transactions matching the account number (id)
+            var ctList = db.CustomerTransactions.Where(a => a.AccountNum == id);
+
+            //Return as a list
+            model.CustomerTransactions = await ctList.ToListAsync();
+
+            // create set of datapoints
+            List<DataPoint> lineDataPoints = new List<DataPoint>();
+
+
+            lineDataPoints.Add(new DataPoint(1388514600000, 102.1));
+            lineDataPoints.Add(new DataPoint(1391193000000, 104.83));
+            lineDataPoints.Add(new DataPoint(1393612200000, 104.04));
+            lineDataPoints.Add(new DataPoint(1396290600000, 104.87));
+            lineDataPoints.Add(new DataPoint(1398882600000, 105.71));
+            lineDataPoints.Add(new DataPoint(1401561000000, 108.37));
+            lineDataPoints.Add(new DataPoint(1404153000000, 105.23));
+            lineDataPoints.Add(new DataPoint(1406831400000, 100.05));
+            lineDataPoints.Add(new DataPoint(1409509800000, 95.85));
+            lineDataPoints.Add(new DataPoint(1412101800000, 86.08));
+            lineDataPoints.Add(new DataPoint(1414780200000, 76.99));
+            lineDataPoints.Add(new DataPoint(1417372200000, 60.7));
+            lineDataPoints.Add(new DataPoint(1420050600000, 47.11));
+            lineDataPoints.Add(new DataPoint(1422729000000, 54.79));
+            lineDataPoints.Add(new DataPoint(1425148200000, 52.83));
+            lineDataPoints.Add(new DataPoint(1427826600000, 57.54));
+            lineDataPoints.Add(new DataPoint(1430418600000, 62.51));
+            lineDataPoints.Add(new DataPoint(1433097000000, 61.31));
+            lineDataPoints.Add(new DataPoint(1435689000000, 54.34));
+            lineDataPoints.Add(new DataPoint(1438367400000, 45.69));
+            lineDataPoints.Add(new DataPoint(1441045800000, 46.28));
+            lineDataPoints.Add(new DataPoint(1443637800000, 46.96));
+            lineDataPoints.Add(new DataPoint(1446316200000, 43.11));
+            lineDataPoints.Add(new DataPoint(1448908200000, 36.57));
+            lineDataPoints.Add(new DataPoint(1451586600000, 29.78));
+            lineDataPoints.Add(new DataPoint(1454265000000, 31.03));
+            lineDataPoints.Add(new DataPoint(1456770600000, 37.34));
+            lineDataPoints.Add(new DataPoint(1459449000000, 40.75));
+            lineDataPoints.Add(new DataPoint(1462041000000, 45.94));
+
+            model.LineChartDataPoints = lineDataPoints;
+
+            List<PieDataPoint> pieDataPoints = new List<PieDataPoint>();
+
+            pieDataPoints.Add(new PieDataPoint("Housing", 25));
+            pieDataPoints.Add(new PieDataPoint("Utilities", 10));
+            pieDataPoints.Add(new PieDataPoint("Food", 10));
+            pieDataPoints.Add(new PieDataPoint("Recreation", 5));
+            pieDataPoints.Add(new PieDataPoint("Savings", 10));
+            pieDataPoints.Add(new PieDataPoint("Personal Care", 10));
+            pieDataPoints.Add(new PieDataPoint("Health", 5));
+            pieDataPoints.Add(new PieDataPoint("Debt", 5));
+            pieDataPoints.Add(new PieDataPoint("Transportation", 10));
+            pieDataPoints.Add(new PieDataPoint("Others", 10));
+
+            model.PieChartDataPoints = pieDataPoints;
+
+            return View(model);
+        }
     }
+
 }

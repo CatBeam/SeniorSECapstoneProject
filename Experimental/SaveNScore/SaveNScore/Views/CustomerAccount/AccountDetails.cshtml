@@ -1,0 +1,14 @@
+﻿@model SaveNScore.ViewModels.AccountDetailsViewModel
+
+@{
+    ViewBag.Title = "AccountDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Account Details</h2>
+
+@Html.Partial("_BalanceHistoryChart", Model);
+@*@Html.Partial("_SpendingCategoriesChart", Model);*@
+@Html.Partial("_TransactionList", Model.CustomerTransactions);
+
+
