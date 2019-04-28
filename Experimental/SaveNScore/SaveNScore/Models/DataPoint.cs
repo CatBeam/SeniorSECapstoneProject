@@ -10,7 +10,7 @@ namespace SaveNScore.Models
     [DataContract]
     public class DataPoint
     {
-        public DataPoint(double x, double y)
+        public DataPoint(double x, decimal y)
         {
             this.x = x;
             this.Y = y;
@@ -22,6 +22,6 @@ namespace SaveNScore.Models
 
         //Explicitly setting the name to be used while serializing to JSON.
         [DataMember(Name = "y")]
-        public Nullable<double> Y = null;
+        public Nullable<decimal> Y = null;
     }
 }

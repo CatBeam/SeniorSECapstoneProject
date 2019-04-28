@@ -43,6 +43,6 @@ namespace SaveNScore.Models
 
     public enum TransactionTypeEnum
     {
-        Debit, Credit
+        Credit, Debit
     }
 }
