@@ -17,12 +17,21 @@ namespace SaveNScore.Models
 
         [Key, Column(Order = 1)]
         [DisplayName("Achievement Number")]
-        public int AchievementNum { get; set; }
+        public AchievementType AchType { get; set; }
 
         [DisplayName("Completion Status")]
         public bool Completed { get; set; }
 
         public string Description { get; set; }
 
+        public int CountToUnlock { get; set; }
     }
+
+    public enum AchievementType
+    {
+        CREATE_SAVINGS_ACCOUNT, CREATE_GOAL, COMPLETE_GOAL, ACCOUNT_5K,
+        ACCOUNT_10K, UPDATE_GOAL, ADD_TRANSACTION, SAVE_1K_TOTAL
+    };
+
+
 }

@@ -17,7 +17,6 @@ namespace SaveNScore.Controllers
         //Create DB Instance
         private ApplicationDbContext db = new ApplicationDbContext();
 
-
         // GET: CustomerTransaction
         public async Task<ActionResult> Index()
         {

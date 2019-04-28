@@ -72,9 +72,8 @@
             @Html.DisplayFor(modelItem => item.Completed)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.GoalID }) |
             @Html.ActionLink("Details", "Details", new { id=item.GoalID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.GoalID })
+            @Html.ActionLink("Delete", "DeleteGoal", new { id=item.GoalID })
         </td>
     </tr>
 }
