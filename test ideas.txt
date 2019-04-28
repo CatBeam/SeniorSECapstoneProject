@@ -1,0 +1,11 @@
+General Test Ideas
+
+Balance Shows Up Properly and Only for Proper User(s)
+Transactions Show up Properly and Only for Proper User(s)
+Achievements Show up Properly and Only for Proper User(s)
+Graphs Display Properly
+Registration Works Properly
+Login Works Properly
+Single Page Features Work Properly
+Customer Accounts Page
+Goals Creation
