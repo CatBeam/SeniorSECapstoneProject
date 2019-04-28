@@ -247,6 +247,10 @@
     <Compile Include="Migrations\201904072157161_AccountJointPrimaryKey.Designer.cs">
       <DependentUpon>201904072157161_AccountJointPrimaryKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904272126065_DevBranchInit.cs" />
+    <Compile Include="Migrations\201904272126065_DevBranchInit.Designer.cs">
+      <DependentUpon>201904272126065_DevBranchInit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Achievement.cs" />
     <Compile Include="Models\Budget.cs" />
@@ -292,6 +296,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904072157161_AccountJointPrimaryKey.resx">
       <DependentUpon>201904072157161_AccountJointPrimaryKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904272126065_DevBranchInit.resx">
+      <DependentUpon>201904272126065_DevBranchInit.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
