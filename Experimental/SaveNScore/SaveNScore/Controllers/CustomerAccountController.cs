@@ -125,6 +125,63 @@ namespace SaveNScore.Controllers
             return View(await ctList.ToListAsync());
         }
 
+        [HttpGet]
+        [ActionName("AccountGoals")] //In case we change the name of the function later on
+        public async Task<ActionResult> AccountGoals(String id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //Find all Goals matching the account number
+            var goalsList = db.Goals.Where(a => a.AccountNum == id);
+
+            //Return goals as a list
+            return View(await goalsList.ToListAsync());
+        }
+
+        public async Task<ActionResult> CreateGoal()
+        {
+            var uid = User.Identity.GetUserId();
+            
+            //Get Customer Accounts tied to UserID
+            var customerAccounts = db.CustomersAccounts.Where(u => u.UserID == uid);
+            List<CustomerAccount> customerAccs = await customerAccounts.ToListAsync();
+            List<SelectListItem> caList = new List<SelectListItem>();
+
+            //For each account number tied to the User's UserID, save the account number
+            foreach (var acc in customerAccs)
+            {
+                caList.Add(new SelectListItem { Text = acc.AccountNum, Value = acc.AccountNum });
+            }
+
+            //Save account numbers for display in CreateGoal Dropdownlist
+            ViewData["accounts"] = caList;
+
+            return View();
+        }
+
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateGoal([Bind(Include = "AccountNum,GoalType, GoalPeriod,StartValue,LimitValue,Description")] Goal userGoal)
+        {
+            if (ModelState.IsValid)
+            {
+                var uid = User.Identity.GetUserId();
+                userGoal.UserID = uid;
+                db.Goals.Add(userGoal);
+                userGoal.StartDate = (DateTime)userGoal.StartDate;
+                userGoal.EndDate = (DateTime)userGoal.EndDate;
+                await db.SaveChangesAsync();
+
+                RedirectToAction("AccountGoals", "Account", userGoal.AccountNum);
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+        */
         
         protected override void Dispose(bool disposing)
         {
