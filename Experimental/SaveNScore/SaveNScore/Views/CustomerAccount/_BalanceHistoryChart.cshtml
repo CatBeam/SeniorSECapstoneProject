@@ -1,0 +1,60 @@
+﻿@model SaveNScore.ViewModels.AccountDetailsViewModel
+
+@{
+    Layout = null;
+}
+
+
+<div id="lineChartContainer" style="height: 370px; width: 100%;"></div>
+<div id="pieChartContainer" style="height: 370px; width: 100%;"></div>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+window.onload = function () {
+
+var lineChart = new CanvasJS.Chart("lineChartContainer", {
+	animationEnabled: true,
+	title: {
+		text: "Account Balance History"
+	},
+	axisX: {
+		valueFormatString: "MMM DD YY"
+	},
+	axisY: {
+		title: "Account Balance",
+		prefix: "$",
+		includeZero: false
+	},
+	data: [{
+		type: "stepLine",
+		xValueType: "dateTime",
+		yValueFormatString: "$#,##0.##",
+		xValueFormatString: "MMM DD YY",
+        dataPoints:@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LineChartDataPoints)))
+	}]
+});
+    lineChart.render();
+    var pieChart = new CanvasJS.Chart("pieChartContainer", {
+	theme: "light1", // "light1", "light2", "dark1", "dark2"
+	exportEnabled: true,
+	animationEnabled: true,
+	title: {
+		text: "Spending by Category"
+	},
+	subtitles: [{
+		text: "Last 30 Days"
+	}],
+	data: [{
+		type: "pie",
+		startAngle: 180,
+		toolTipContent: "<b>{label}</b>: {y}%",
+		showInLegend: "true",
+		legendText: "{label}",
+		indexLabel: "{label} - {y}%",
+        dataPoints:@(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.PieChartDataPoints)))
+	}]
+});
+pieChart.render();
+}
+</script>
+
