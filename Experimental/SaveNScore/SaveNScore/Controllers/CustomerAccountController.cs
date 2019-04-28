@@ -111,14 +111,21 @@ namespace SaveNScore.Controllers
             return RedirectToAction("Index", "CustomerAccount");
         }
 
+        [Authorize]
         public async Task<ActionResult> Details(String id)
         {
+            // check if account string is null
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            //Find all Transactions matching the account number (id)
+            // Check if user ID matches current user then get transactions for current account
+            var uid = User.Identity.GetUserId();
+            if (!db.CustomersAccounts.Where(a => a.UserID == uid).Any())
+            {
+                return new HttpStatusCodeResult(403, "You are not authorized to view this account's transactions");
+            }
             var ctList = db.CustomerTransactions.Where(a => a.AccountNum == id);
 
             //Return as a list
