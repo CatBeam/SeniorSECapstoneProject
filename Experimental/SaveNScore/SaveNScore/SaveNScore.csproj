@@ -275,10 +275,11 @@
     <Content Include="Views\CustomerAccount\Index.cshtml" />
     <Content Include="Views\Achievement\Index.cshtml" />
     <Content Include="Views\CustomerAccount\Details.cshtml" />
-    <Content Include="Views\StepLineChart\_Chart.cshtml" />
-    <Content Include="Views\StepLineChart\Index.cshtml" />
     <Content Include="Views\CustomerAccount\AccountGoals.cshtml" />
     <Content Include="Views\CustomerAccount\CreateGoal.cshtml" />
+    <Content Include="Views\StepLineChart\_Chart.cshtml" />
+    <Content Include="Views\StepLineChart\Index.cshtml" />
+    <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

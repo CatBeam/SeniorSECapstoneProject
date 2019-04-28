@@ -17,6 +17,9 @@ namespace SaveNScore.Controllers
         //Create DB Instance
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
+        /*START OF HOME/CUSTOMERACCOUNT METHODS */
+
         // GET: CustomerAccount
         public async Task<ActionResult> Index()
         {
@@ -41,23 +44,6 @@ namespace SaveNScore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "AccountNum,AccountType,Balance")] CustomerAccount ca)
         {
-            //TEST SEGMENT
-            if(ca.UserID != User.Identity.GetUserId())
-            {
-                Console.WriteLine("CustomerAccountController-Post-Create UserID is null");
-                ca.UserID = User.Identity.GetUserId();
-
-                if (ca.UserID != User.Identity.GetUserId())
-                {
-                    Console.WriteLine("CustomerAccountController-Post-Create UserID assignment failed");
-                }
-                else
-                {
-                    Console.WriteLine("UserID assigned as: " + ca.UserID);
-                }
-            }
-            //END TEST SEGMENT
-
             //If model is valid, add entry to table and save changes to the db.
             if(ModelState.IsValid)
             {
@@ -67,7 +53,6 @@ namespace SaveNScore.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", "CustomerAccount");
             }
-
 
             return View(ca);
         }
@@ -82,10 +67,6 @@ namespace SaveNScore.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            /*TEST SEGMENT
-            var customerAcc = db.CustomersAccounts;
-            var userAcc = customerAcc.Where(a => a.UserID == uid && a.AccountNum == id);
-            */
             var uid = User.Identity.GetUserId();
             CustomerAccount acc = await db.CustomersAccounts.FindAsync(uid,id);
             return View(acc);
@@ -125,6 +106,10 @@ namespace SaveNScore.Controllers
             return View(await ctList.ToListAsync());
         }
 
+
+        /*START OF HOME/CUSTOMERACCOUNT/ACCOUNTGOALS METHODS */
+
+
         [HttpGet]
         [ActionName("AccountGoals")] //In case we change the name of the function later on
         public async Task<ActionResult> AccountGoals(String id)
@@ -162,26 +147,54 @@ namespace SaveNScore.Controllers
             return View();
         }
 
-        /*
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateGoal([Bind(Include = "AccountNum,GoalType, GoalPeriod,StartValue,LimitValue,Description")] Goal userGoal)
+        public async Task<ActionResult> CreateGoal([Bind(Include = "AccountNum,GoalType,StartDate,EndDate,GoalPeriod,StartValue,LimitValue,Description")] Goal userGoal)
         {
             if (ModelState.IsValid)
             {
+                //Get User's ID and attach to Goal
                 var uid = User.Identity.GetUserId();
                 userGoal.UserID = uid;
-                db.Goals.Add(userGoal);
-                userGoal.StartDate = (DateTime)userGoal.StartDate;
-                userGoal.EndDate = (DateTime)userGoal.EndDate;
-                await db.SaveChangesAsync();
 
-                RedirectToAction("AccountGoals", "Account", userGoal.AccountNum);
+                //Add Goal to DB and Save Changes
+                db.Goals.Add(userGoal);
+                await db.SaveChangesAsync();
+                
+                return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
 
+            //Catch Bad Request
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-        */
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> DeleteGoal(int? id)
+        {
+            Goal goal = await db.Goals.FindAsync(id);
+            return View(goal);
+        }
+        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteGoal(int id)
+        {
+            //Find Goal to Delete
+            var goalsTable = db.Goals;
+            Goal goalToDelete = await goalsTable.FindAsync(id);
+            
+            //Extract account number for redirect
+            string accountNumber = goalToDelete.AccountNum;
+
+            //Remove Goal and save changes
+            db.Goals.Remove(goalToDelete);
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("AccountGoals/" + accountNumber, "CustomerAccount");
+        }
         
         protected override void Dispose(bool disposing)
         {
