@@ -214,9 +214,15 @@ namespace SaveNScore.Controllers
             List<DataPoint> lineDataPoints = new List<DataPoint>();
 
             // TODO: Get starting balance from database
-            var currBalance = 500.00M;
+            var startingBalance = db.CustomersAccounts
+                .Where(a => a.AccountNum == id)
+                .Select(a => a.Balance)
+                .FirstOrDefault();
+            var currBalance = startingBalance;
             var tempDate = new DateTime();
             var utcDate = new DateTime(1969, 12, 31);
+            var transCategories = db.TransactionCategories;
+
             tempDate = model.CustomerTransactions[0].TransactionDate;
 
             foreach (var customerTransaction in model.CustomerTransactions)
@@ -242,18 +248,57 @@ namespace SaveNScore.Controllers
 
             List<PieDataPoint> pieDataPoints = new List<PieDataPoint>();
 
-            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Housing), 25));
-            pieDataPoints.Add(new PieDataPoint("Utilities", 10));
-            pieDataPoints.Add(new PieDataPoint("Food", 10));
-            pieDataPoints.Add(new PieDataPoint("Recreation", 5));
-            pieDataPoints.Add(new PieDataPoint("Savings", 10));
-            pieDataPoints.Add(new PieDataPoint("Personal Care", 10));
-            pieDataPoints.Add(new PieDataPoint("Health", 5));
-            pieDataPoints.Add(new PieDataPoint("Debt", 5));
-            pieDataPoints.Add(new PieDataPoint("Transportation", 10));
-            pieDataPoints.Add(new PieDataPoint("Others", 10));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Housing), 25.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Utilities), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Food), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Transportation), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Recreation), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Savings), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Personal), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Health), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Debt), 10.0));
+            pieDataPoints.Add(new PieDataPoint(nameof(SpendingCategory.Other), 10.0));
 
             model.PieChartDataPoints = pieDataPoints;
+            List<Decimal> amtByCat = new List<Decimal>();
+            for (int i = 0; i<10; i++)
+            {
+                amtByCat.Add(0);
+            }
+
+            // loop through transactions, update amount for each category
+            foreach (var customerTransaction in model.CustomerTransactions)
+            {
+                if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                {
+                    var category = transCategories
+                        .Where(t => t.TransDescription == customerTransaction.Description)
+                        .Select(t => t.SpendingCategory)
+                        .FirstOrDefault();
+
+                    int categoryInt = Convert.ToInt32(category);
+                    amtByCat[categoryInt] += customerTransaction.Amount;
+                }
+            }
+
+            // calcuate total spending
+            decimal sum = amtByCat.Sum();
+
+            // calculate spending percentage by category
+            // add percentages to datapoints
+
+            List<Double> percentByCat = new List<double>(10);
+            for (int i = 0; i < 10; i++)
+            {
+                percentByCat.Add(0);
+            }
+
+            for (int i = 0; i<10; i++)
+            {
+                percentByCat[i] = Math.Round(((double)(amtByCat[i] / sum) * 100), 2);
+                pieDataPoints[i].Y = percentByCat[i];
+
+            }
 
             return View(model);
         }
