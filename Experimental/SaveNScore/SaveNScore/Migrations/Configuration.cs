@@ -1,9 +1,14 @@
 namespace SaveNScore.Migrations
 {
+    using CsvHelper;
+    using SaveNScore.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Text;
 
     internal sealed class Configuration : DbMigrationsConfiguration<SaveNScore.Models.ApplicationDbContext>
     {
@@ -18,6 +23,17 @@ namespace SaveNScore.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string resourceName = "SaveNScore.Domain.SeedData.SpendingCategories.csv";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    CsvReader csvReader = new CsvReader(reader);
+                    var transactionCategories = csvReader.GetRecords<TransactionCategory>().ToArray();
+                    context.TransactionCategories.AddOrUpdate(c => c.Id, transactionCategories);
+                }
+            }
         }
     }
 }
