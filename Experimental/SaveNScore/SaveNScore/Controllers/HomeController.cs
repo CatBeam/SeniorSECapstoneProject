@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using SaveNScore.Models;
-using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity;
+using System.Net;
+using SaveNScore.ViewModels;
+using Newtonsoft.Json;
 
 namespace SaveNScore.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        public async Task<ActionResult> Index()
         {
-            
-            return View();
+            //Create DB CustomerAccount Table Instance
+            var customerAccs = db.CustomersAccounts;
+
+            //QUERY: Get all CustomerAccounts tied to this UserID
+            var uid = User.Identity.GetUserId();
+            var userAccs = customerAccs.Where(u => u.UserID == uid);
+
+            return View(await userAccs.ToListAsync());
         }
 
         public ActionResult About()
