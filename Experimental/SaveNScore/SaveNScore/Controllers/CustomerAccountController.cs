@@ -134,23 +134,12 @@ namespace SaveNScore.Controllers
             return View(await goalsList.ToListAsync());
         }
 
-        public async Task<ActionResult> CreateGoal()
+        public async Task<ActionResult> CreateSingleGoal()
         {
             var uid = User.Identity.GetUserId();
 
-            //Get Customer Accounts tied to UserID
-            var customerAccounts = db.CustomersAccounts.Where(u => u.UserID == uid);
-            List<CustomerAccount> customerAccs = await customerAccounts.ToListAsync();
-            List<SelectListItem> caList = new List<SelectListItem>();
-
-            //For each account number tied to the User's UserID, save the account number
-            foreach (var acc in customerAccs)
-            {
-                caList.Add(new SelectListItem { Text = acc.AccountNum, Value = acc.AccountNum });
-            }
-
-            //Save account numbers for display in CreateGoal Dropdownlist
-            ViewData["accounts"] = caList;
+            //Get User's Accounts as SelectListItem
+            ViewData["accounts"] = await UserUtility.GetUserAccountsList(db, uid);
 
             return View();
         }
@@ -158,13 +147,16 @@ namespace SaveNScore.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateGoal([Bind(Include = "AccountNum,GoalType,StartDate,EndDate,GoalPeriod,StartValue,LimitValue,Description")] Goal userGoal)
+        public async Task<ActionResult> CreateSingleGoal([Bind(Include = "AccountNum,StartDate,EndDate,StartValue,LimitValue,Description")] Goal userGoal)
         {
             if (ModelState.IsValid)
             {
                 //Get User's ID and attach to Goal
                 var uid = User.Identity.GetUserId();
                 userGoal.UserID = uid;
+                userGoal.GoalType = GoalTypeEnum.SaveByDate;
+                userGoal.GoalPeriod = GoalPeriodEnum.Single;
+                userGoal.Completed = false;
 
                 //Add Goal to DB and Save Changes
                 db.Goals.Add(userGoal);
@@ -173,8 +165,12 @@ namespace SaveNScore.Controllers
                 return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
 
-            //Catch Bad Request
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            /*If Model is NOT valid*/
+            //Get User's Accounts as SelectListItem
+            ViewData["accounts"] = await UserUtility.GetUserAccountsList(db, User.Identity.GetUserId());
+
+            //Return to view for retry
+            return View(userGoal);
         }
 
         [HttpGet]

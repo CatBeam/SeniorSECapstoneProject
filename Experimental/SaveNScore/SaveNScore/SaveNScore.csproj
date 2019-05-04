@@ -291,7 +291,7 @@
     <Content Include="Views\CustomerAccount\_BalanceHistoryChart.cshtml" />
     <Content Include="Views\StepLineChart\Index.cshtml" />
     <Content Include="Views\CustomerAccount\AccountGoals.cshtml" />
-    <Content Include="Views\CustomerAccount\CreateGoal.cshtml" />
+    <Content Include="Views\CustomerAccount\CreateSingleGoal.cshtml" />
     <Content Include="Views\CustomerAccount\AccountDetails.cshtml" />
     <Content Include="Views\CustomerAccount\_TransactionList.cshtml" />
     <Content Include="Views\CustomerAccount\_SpendingCategoriesChart.cshtml" />

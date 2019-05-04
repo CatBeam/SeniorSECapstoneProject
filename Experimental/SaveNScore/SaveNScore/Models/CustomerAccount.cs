@@ -32,6 +32,7 @@ namespace SaveNScore.Models
         [DisplayFormat(DataFormatString = "{0:c}")]
         [Column(TypeName = "money")]
         public decimal Balance { get; set; }
+
     }
 
     public enum CustomerAccountTypeEnum
