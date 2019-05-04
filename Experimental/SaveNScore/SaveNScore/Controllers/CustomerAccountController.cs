@@ -152,6 +152,49 @@ namespace SaveNScore.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult> CreateRecurringGoal()
+        {
+            var uid = User.Identity.GetUserId();
+
+            //Get User's Accounts as SelectListItem
+            ViewData["accounts"] = await UserUtility.GetUserAccountsList(db, uid);
+
+            return View();
+        }
+        
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateRecurringGoal([Bind(Include = "AccountNum,GoalPeriod,LimitValue,StartDate,Description")] Goal userGoal)
+        {
+            if (ModelState.IsValid)
+            {
+                var uid = User.Identity.GetUserId();
+                userGoal.UserID = uid;
+                userGoal.StartValue = 0;
+                userGoal.GoalType = GoalTypeEnum.Recurring;
+                userGoal.Completed = false;
+
+                switch (userGoal.GoalPeriod)
+                {
+                    case GoalPeriodEnum.Weekly:
+                        userGoal.EndDate = userGoal.StartDate.AddDays(7);
+                        break;
+
+                    case GoalPeriodEnum.Monthly:
+                        userGoal.EndDate = userGoal.EndDate.AddMonths(1);
+                        break;
+
+                    case GoalPeriodEnum.Yearly:
+                        userGoal.EndDate = userGoal.EndDate.AddYears(1);
+                        break;
+                }
+
+            }
+        }
+        */
+
+        [HttpGet]
         [Authorize]
         public async Task<ActionResult> DeleteGoal(int? id)
         {
