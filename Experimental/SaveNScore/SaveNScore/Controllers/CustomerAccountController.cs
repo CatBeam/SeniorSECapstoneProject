@@ -26,12 +26,39 @@ namespace SaveNScore.Controllers
         {
             //Create DB CustomerAccount Table Instance
             var customerAccs = db.CustomersAccounts;
+            var customerTransactions = db.CustomerTransactions;
 
             //QUERY: Get all CustomerAccounts tied to this UserID
             var uid = User.Identity.GetUserId();
             var userAccs = customerAccs.Where(u => u.UserID == uid);
+            List<CustomerAccount> userAccsList = await userAccs.ToListAsync();
 
-            return View(await userAccs.ToListAsync());
+            foreach(CustomerAccount account in userAccsList)
+            {
+                // loop through transactions to calculate balance
+                Decimal currBalance = account.Balance;
+                List<CustomerTransaction> transList = new List<CustomerTransaction>();
+                var ctList = customerTransactions
+                .Where(a => a.AccountNum == account.AccountNum)
+                .OrderBy(data => data.TransactionDate);
+
+                //Return as a list
+                transList = await ctList.ToListAsync();
+
+                foreach (var customerTransaction in transList)
+                {
+                    if (customerTransaction.TransactionType == TransactionTypeEnum.Credit)
+                    {
+                        currBalance = currBalance + customerTransaction.Amount;
+                    }
+                    else if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                    {
+                        currBalance = currBalance - customerTransaction.Amount;
+                    }
+                }
+                account.Balance = currBalance;
+            }
+            return View(userAccsList);
         }
 
         public ActionResult Create()
@@ -201,7 +228,6 @@ namespace SaveNScore.Controllers
             //}
 
             //Find all Transactions matching the account number (id)
-            // TODO: Sort initial list from oldest to newest
             var ctList = db.CustomerTransactions
                 .Where(a => a.AccountNum == id)
                 .OrderBy(data => data.TransactionDate);
@@ -222,11 +248,22 @@ namespace SaveNScore.Controllers
             var tempDate = new DateTime();
             var utcDate = new DateTime(1969, 12, 31);
             var transCategories = db.TransactionCategories;
+            List<TransactionWithCategory> transLookup = new List<TransactionWithCategory>();
 
             tempDate = model.CustomerTransactions[0].TransactionDate;
 
             foreach (var customerTransaction in model.CustomerTransactions)
             {
+                var transCat = db.TransactionCategories
+                .Where(a => a.TransDescription == customerTransaction.Description)
+                .Select(a => a.SpendingCategory)
+                .FirstOrDefault();
+
+                TransactionWithCategory transCatEntry = new TransactionWithCategory();
+                transCatEntry.TransactionID = customerTransaction.TransactionID;
+                transCatEntry.spendingCategory = transCat;
+                transLookup.Add(transCatEntry);
+
                 if (tempDate.Date != customerTransaction.TransactionDate.Date)
                 {
                     lineDataPoints.Add(new DataPoint((tempDate.Subtract(utcDate).TotalMilliseconds), currBalance));
@@ -241,6 +278,8 @@ namespace SaveNScore.Controllers
                         currBalance = currBalance - customerTransaction.Amount;
                     }  
             }
+
+            model.TransactionsWithCategories = transLookup;
 
             lineDataPoints.Add(new DataPoint((tempDate.Subtract(utcDate).TotalMilliseconds), currBalance));
 
