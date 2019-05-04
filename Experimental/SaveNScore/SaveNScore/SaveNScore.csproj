@@ -202,10 +202,9 @@
     <Compile Include="Migrations\201904272230207_transactionSeed.cs" />
     <Compile Include="Migrations\201904272230207_transactionSeed.Designer.cs">
       <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904290052061_merge.cs" />
-    <Compile Include="Migrations\201904290052061_merge.Designer.cs">
-      <DependentUpon>201904290052061_merge.cs</DependentUpon>
+    <Compile Include="Migrations\201905040338236_BenMig1.cs" />
+    <Compile Include="Migrations\201905040338236_BenMig1.Designer.cs">
+      <DependentUpon>201905040338236_BenMig1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201905041927001_TransactionCategories.cs" />
     <Compile Include="Migrations\201905041927001_TransactionCategories.Designer.cs">
@@ -219,6 +218,7 @@
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\DataPoint.cs" />
     <Compile Include="Models\PieDataPoint.cs" />
+    <Compile Include="Models\UserUtility.cs" />
     <Compile Include="Models\TransactionCategory.cs" />
     <Compile Include="Models\ValidationClasses.cs" />
     <Compile Include="ViewModels\AccountDetailsViewModel.cs" />
@@ -310,6 +310,7 @@
     <Content Include="Views\CustomerAccount\_TransactionList.cshtml" />
     <Content Include="Views\CustomerAccount\_SpendingCategoriesChart.cshtml" />
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
+    <Content Include="Views\Achievement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -341,8 +342,8 @@
     <EmbeddedResource Include="Migrations\201904272230207_transactionSeed.resx">
       <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904290052061_merge.resx">
-      <DependentUpon>201904290052061_merge.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905040338236_BenMig1.resx">
+      <DependentUpon>201905040338236_BenMig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -19,7 +19,7 @@ namespace SaveNScore.Controllers
         public async Task<ActionResult> Index()
         {
             var uid = User.Identity.GetUserId();
-
+            await UserUtility.UpdateAchievements(User.Identity.GetUserId());
             //Get All User Achievements
             var userAchievements = db.Achievements.Where(u => u.UserID == uid);
 

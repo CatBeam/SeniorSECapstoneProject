@@ -5,19 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>User Achievements</h2>
+<h2>Index</h2>
 
+<p>
 
+</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AchievementNum)
+            @Html.DisplayNameFor(model => model.Completed)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Completed)
+            @Html.DisplayNameFor(model => model.CountToUnlock)
         </th>
         <th></th>
     </tr>
@@ -25,16 +27,18 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.AchievementNum)
+            @Html.DisplayFor(modelItem => item.Completed)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Completed)
+            @Html.DisplayFor(modelItem => item.CountToUnlock)
         </td>
         <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
             @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
     </tr>
 }
