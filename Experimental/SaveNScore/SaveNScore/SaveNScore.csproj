@@ -197,6 +197,10 @@
     <Compile Include="Migrations\201904272230207_transactionSeed.Designer.cs">
       <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905040338236_BenMig1.cs" />
+    <Compile Include="Migrations\201905040338236_BenMig1.Designer.cs">
+      <DependentUpon>201905040338236_BenMig1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Achievement.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -205,6 +209,7 @@
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\DataPoint.cs" />
     <Compile Include="Models\PieDataPoint.cs" />
+    <Compile Include="Models\UserUtility.cs" />
     <Compile Include="Models\ValidationClasses.cs" />
     <Compile Include="ViewModels\AccountDetailsViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
@@ -282,7 +287,6 @@
     <Content Include="Views\CustomerAccount\Create.cshtml" />
     <Content Include="Views\CustomerAccount\Delete.cshtml" />
     <Content Include="Views\CustomerAccount\Index.cshtml" />
-    <Content Include="Views\Achievement\Index.cshtml" />
     <Content Include="Views\CustomerAccount\Details.cshtml" />
     <Content Include="Views\CustomerAccount\_BalanceHistoryChart.cshtml" />
     <Content Include="Views\StepLineChart\Index.cshtml" />
@@ -292,6 +296,7 @@
     <Content Include="Views\CustomerAccount\_TransactionList.cshtml" />
     <Content Include="Views\CustomerAccount\_SpendingCategoriesChart.cshtml" />
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
+    <Content Include="Views\Achievement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -322,6 +327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904272230207_transactionSeed.resx">
       <DependentUpon>201904272230207_transactionSeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905040338236_BenMig1.resx">
+      <DependentUpon>201905040338236_BenMig1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
