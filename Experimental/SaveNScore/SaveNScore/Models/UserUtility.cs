@@ -19,6 +19,7 @@ namespace SaveNScore.Models
                 ApplicationDbContext db = new ApplicationDbContext();
 
                 // Create User's Default Achievements
+                //IF ACHIEVEMENTS ARE ADDED THEN THE CONDITIONAL ON LINE 60 MUST BE UPDATED
                 List<Achievement> userAchievements = new List<Achievement>{
                     new Achievement { UserID = uid, AchType = AchievementType.CREATE_SAVINGS_ACCOUNT, Description = "Create a Savings Account!", Completed = false, CountToUnlock = 1 },
                     new Achievement { UserID = uid, AchType = AchievementType.CREATE_GOAL, Description = "Create a Goal!", Completed = false, CountToUnlock = 1},
@@ -52,10 +53,23 @@ namespace SaveNScore.Models
             var achievementsTable = db.Achievements;
             var transactionsTable = db.CustomerTransactions;
 
+            //Check to make sure Achievements exist
+            List<Achievement> userAchievements = await achievementsTable.Where(u => u.UserID == uid).ToListAsync();
+
+            // If user doesn't have achievements, generate them.
+            // CURRENTLY HAVE 8 ACHIEVEMENTS
+            if(userAchievements.Count != 8)
+            {
+                await GenerateUserAchievementsAsync(uid);
+                db = new ApplicationDbContext();
+                achievementsTable = db.Achievements;
+            }
+
             //QUERIES
             /*Queries: All User Savings Accounts and CheckingAccounts*/
             var savingsQuery = accountsTable.Where(s => s.UserID == uid && s.AccountType == CustomerAccountTypeEnum.Savings);
             var checkingQuery = accountsTable.Where(c => c.UserID == uid && c.AccountType == CustomerAccountTypeEnum.Checking);
+
 
             /*Queries: All User Transactions and Goals*/
             //TODO: Transactions Query
@@ -146,6 +160,25 @@ namespace SaveNScore.Models
                 await context.SaveChangesAsync();
             }
         }
+
+        public static async Task<List<SelectListItem>> GetUserAccountsList(ApplicationDbContext db, string uid)
+        {
+            //Get Customer Accounts tied to UserID
+            var customerAccounts = db.CustomersAccounts.Where(u => u.UserID == uid);
+            List<CustomerAccount> customerAccs = await customerAccounts.ToListAsync();
+            List<SelectListItem> caList = new List<SelectListItem>();
+
+            //For each account number tied to the User's UserID, save the account number
+            foreach (var acc in customerAccs)
+            {
+                caList.Add(new SelectListItem { Text = acc.AccountNum, Value = acc.AccountNum });
+            }
+
+            return caList;
+        }
+        
+
+        
 
     }
 }

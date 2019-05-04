@@ -8,7 +8,7 @@ using System.Web;
 
 namespace SaveNScore.Models
 {
-    public class CustomerTransaction
+    public class CustomerTransaction : IValidatableObject
     {
 
         [Key]
@@ -39,6 +39,12 @@ namespace SaveNScore.Models
         [StringLength(500)]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            if (Amount <= 0)
+                yield return new ValidationResult("The Transaction Amount must be Greater than 0");
+        }
     }
 
     public enum TransactionTypeEnum

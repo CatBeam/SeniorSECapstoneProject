@@ -19,7 +19,7 @@ namespace SaveNScore.Models
      */
 
 
-    public class Goal
+    public class Goal : IValidatableObject
     {
         //[ForeignKey("CustomerAccount")]
         public string UserID { get; set; }
@@ -63,6 +63,35 @@ namespace SaveNScore.Models
         public string Description { get; set; }
 
         public bool Completed { get; set; }
+
+        #region Validations
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            DateTime today = DateTime.Now;
+
+            if (StartDate > EndDate)
+            {
+                yield return new ValidationResult("Ending Date must be greater than Starting Date");
+            }
+
+            if (StartValue > LimitValue)
+            {
+                yield return new ValidationResult("Limiting Value must be greater than Starting Value");
+            }
+
+            if (StartValue < 0)
+            {
+                yield return new ValidationResult("The Starting Value cannot be a negative number");
+            }
+
+            if (EndDate < today)
+            {
+                yield return new ValidationResult("The Ending Date cannot be in the past. No time travel allowed.");
+            }
+
+        }
+        #endregion Validations
+
     }
 
     public enum GoalTypeEnum
@@ -72,6 +101,6 @@ namespace SaveNScore.Models
     
     public enum GoalPeriodEnum
     {
-        Weekly, Monthly, Yearly
+        Weekly, Monthly, Yearly, Single
     }
 }

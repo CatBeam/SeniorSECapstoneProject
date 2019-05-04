@@ -308,6 +308,8 @@
     <Content Include="Views\CustomerAccount\AccountGoals.cshtml" />
     <Content Include="Views\CustomerAccount\CreateGoal.cshtml" />
     <Content Include="Views\CustomerAccount\Details.cshtml" />
+    <Content Include="Views\CustomerAccount\CreateSingleGoal.cshtml" />
+    <Content Include="Views\CustomerAccount\AccountDetails.cshtml" />
     <Content Include="Views\CustomerAccount\_TransactionList.cshtml" />
     <Content Include="Views\CustomerAccount\_SpendingCategoriesChart.cshtml" />
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
