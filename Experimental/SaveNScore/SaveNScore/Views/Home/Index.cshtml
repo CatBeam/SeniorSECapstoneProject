@@ -1,31 +1,101 @@
-﻿@{
+﻿@model IEnumerable<SaveNScore.Models.CustomerAccount>
+
+@{
     ViewBag.Title = "Home Page";
 }
+<style>
+    .divTable {
+        display: table;
+        width: 100%;
+        margin: 0 auto;
+        border: 2px solid #000;
+        border-radius: 4px;
+        background-color: white;
+        overflow: hidden;
+    }
 
-<div class="jumbotron">
-    <h1>Save N Score</h1>
-    <p class="lead">Save N Score is a sweet budget app with gamification.</p>
-    @* Link below is placeholder for a demo/marketing *@
-    <p><a href="https://savenscore.com/learnmore" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+    .divTableRow {
+        display: table-row;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Save N Score helps you keep your budget on track by...
-            @* Add sales pitch *@
-        </p>
-        <p><a class="btn btn-default" href="http://SaveNScore/Home/About">Learn more &raquo;</a></p>
+    .divTableHeading {
+        background-color: #EEE;
+        display: table-header-group;
+    }
+
+    .divTableCell, .divTableHead {
+        border: 1px solid #999999;
+        display: table-cell;
+        padding: 3px 10px;
+    }
+
+    .divTableHeading {
+        background-color: #EEE;
+        display: table-header-group;
+        font-weight: bold;
+    }
+
+    .divTableFoot {
+        background-color: #EEE;
+        display: table-footer-group;
+        font-weight: bold;
+    }
+
+    .divTableBody {
+        display: table-row-group;
+    }
+</style>
+
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <div class="jumbotron">
+        <div class="divTable" align="center">
+            <div class="divTableBody">
+                <div class="divTableRow">
+                    <div class="divTableCell">
+                        @foreach (var item in Model)
+                        {
+                            @Html.DisplayFor(modelItem => item.AccountType)<br />
+                        }
+                    </div>
+                    <div class="divTableCell">This is where graph data and 10 recent transactions will be displayed after clicking an account.</div>
+                </div>
+                <div class="divTableRow">
+                    <div class="divTableCell">This is where Achievements will be listed</div>
+                    <div class="divTableCell">This will list current goals</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get Advice</h2>
-        <p>Add some budget advice resources</p>
-        <p><a class="btn btn-default" href="https://adviceonpersonalfinance.com">Learn more &raquo;</a></p>
+}
+else
+{
+    <div class="jumbotron">
+        <h1>Save N Score</h1>
+        <p class="lead">Save N Score is a sweet budget app with gamification.</p>
+        @* Link below is placeholder for a demo/marketing *@
+        <p><a href="https://savenscore.com/learnmore" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
     </div>
-    <div class="col-md-4">
-        <h2>Get Connected</h2>
-        <p>Login or signup, maybe add social logins</p>
-        <p><a class="btn btn-default" href="http://SaveNScore/Home/Login">Login &raquo;</a></p>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                Save N Score helps you keep your budget on track by...
+                @* Add sales pitch *@
+            </p>
+            <p><a class="btn btn-default" href="http://SaveNScore/Home/About">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get Advice</h2>
+            <p>Add some budget advice resources</p>
+            <p><a class="btn btn-default" href="https://adviceonpersonalfinance.com">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get Connected</h2>
+            <p>Login or signup, maybe add social logins</p>
+            <p><a class="btn btn-default" href="http://SaveNScore/Home/Login">Login &raquo;</a></p>
+        </div>
     </div>
-</div>
+}
