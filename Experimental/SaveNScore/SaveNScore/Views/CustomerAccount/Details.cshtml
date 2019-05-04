@@ -1,56 +1,14 @@
-﻿@model IEnumerable<SaveNScore.Models.CustomerTransaction>
+﻿@model SaveNScore.ViewModels.AccountDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Account Details</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountNum)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransactionType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransactionDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+@Html.Partial("_BalanceHistoryChart", Model);
+@*@Html.Partial("_SpendingCategoriesChart", Model);*@
+@Html.Partial("_TransactionList", Model.CustomerTransactions);
 
-    @foreach (var item in Model.OrderByDescending(a => a.TransactionDate))
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.TransactionID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.TransactionID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.TransactionID })
-            </td>
-        </tr>
-    }
 
-</table>

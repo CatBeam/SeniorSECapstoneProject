@@ -34,6 +34,8 @@ namespace SaveNScore.Models
         public DbSet<CustomerTransaction> CustomerTransactions { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<TransactionCategory> TransactionCategories { get; set; }
+
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
