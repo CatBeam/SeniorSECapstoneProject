@@ -19,7 +19,7 @@ namespace SaveNScore.ViewModels
     public class TransactionWithCategory
     {
         public int TransactionID { get; set; }
-        public SpendingCategory spendingCategory { get; set; }
+        public String spendingCategory { get; set; }
     }
 
 }
