@@ -313,6 +313,7 @@
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
     <Content Include="Views\Achievement\Index.cshtml" />
     <Content Include="Views\CustomerAccount\CreateRecurringGoal.cshtml" />
+    <Content Include="Views\Home\_IndexTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -30,6 +30,29 @@ namespace SaveNScore.Controllers
             return View(await userAccs.ToListAsync());
         }
 
+        [HttpGet]
+        public async Task<ActionResult> IndexTransactions(string accountId)
+        {
+            var model = new AccountDetailsViewModel();
+
+            // logic for getting model and data
+            var transactions = db.CustomerTransactions;
+            var customerAccs = db.CustomersAccounts;
+
+            // check if user is authorized to access account, if they arent dont let them see account info
+            var uid = User.Identity.GetUserId();
+            if (!customerAccs.Where(u => u.UserID == uid && u.AccountNum == accountId).Any())
+            {
+                return PartialView();
+            }
+            else
+            {
+                var finalTransactions = transactions.Where(t => t.AccountNum == accountId);
+                model.CustomerTransactions = await finalTransactions.ToListAsync();
+                return PartialView("_IndexTransactions", model);
+            }
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
