@@ -11,7 +11,7 @@ namespace SaveNScore.Models
 {
     public static class UserUtility
     {
-
+        #region Achievements
         public static async Task GenerateUserAchievementsAsync(string uid)
         {
             if (!String.IsNullOrEmpty(uid))
@@ -67,8 +67,8 @@ namespace SaveNScore.Models
 
             //QUERIES
             /*Queries: All User Savings Accounts and CheckingAccounts*/
-            var savingsQuery = accountsTable.Where(s => s.UserID == uid && s.AccountType == CustomerAccountTypeEnum.Savings);
-            var checkingQuery = accountsTable.Where(c => c.UserID == uid && c.AccountType == CustomerAccountTypeEnum.Checking);
+            var savingsQuery = accountsTable.Where(s => s.UserID == uid).Where(s => s.AccountType == CustomerAccountTypeEnum.Savings);
+            var checkingQuery = accountsTable.Where(c => c.UserID == uid).Where(c => c.AccountType == CustomerAccountTypeEnum.Checking);
 
 
             /*Queries: All User Transactions and Goals*/
@@ -89,10 +89,11 @@ namespace SaveNScore.Models
             {
                 foreach (CustomerAccount ca in checkings)
                 {
-                    if (ca.Balance >= accBalance5k)
+                    Decimal accountBalance = await UserUtility.CalculateBalances(ca.UserID, ca.AccountNum);
+                    if (accountBalance >= accBalance5k)
                     {
                         await ActivateAchievementAsync(db, uid, AchievementType.ACCOUNT_5K);
-                        if (ca.Balance >= accBalance10k)
+                        if (accountBalance >= accBalance10k)
                         {
                             await ActivateAchievementAsync(db, uid, AchievementType.ACCOUNT_10K);
                         }
@@ -108,14 +109,15 @@ namespace SaveNScore.Models
 
                 foreach(CustomerAccount ca in savings)
                 {
+                    Decimal accountBalance = await UserUtility.CalculateBalances(ca.UserID, ca.AccountNum);
                     //If Savings Account Balance >= $1,000
-                    if (ca.Balance >= savingBalance1k)
+                    if (accountBalance >= savingBalance1k)
                     {
                         await ActivateAchievementAsync(db, uid, AchievementType.SAVE_1K_TOTAL);
-                        if (ca.Balance >= accBalance5k)
+                        if (accountBalance >= accBalance5k)
                         {
                             await ActivateAchievementAsync(db, uid, AchievementType.ACCOUNT_5K);
-                            if (ca.Balance >= accBalance10k)
+                            if (accountBalance >= accBalance10k)
                             {
                                 await ActivateAchievementAsync(db, uid, AchievementType.ACCOUNT_10K);
                             }
@@ -130,18 +132,7 @@ namespace SaveNScore.Models
             if (goals.Count > 0)
             {
                 await ActivateAchievementAsync(db, uid, AchievementType.CREATE_GOAL);
-
-                foreach(Goal goal in goals)
-                {
-                    //TODO: RETHINK UPDATED GOAL?
-                    if (goal.Completed)
-                    {
-                        await ActivateAchievementAsync(db, uid, AchievementType.COMPLETE_GOAL);
-                    }
-                }
             }
-
-            //TODO: IF(TRANSACTIONS.COUNT > 0)
 
         }
 
@@ -161,6 +152,7 @@ namespace SaveNScore.Models
             }
         }
 
+        #endregion Achievements
         public static async Task<List<SelectListItem>> GetUserAccountsList(ApplicationDbContext db, string uid)
         {
             //Get Customer Accounts tied to UserID
@@ -176,9 +168,108 @@ namespace SaveNScore.Models
 
             return caList;
         }
-        
 
-        
+        public static async Task UpdateGoal(string uid, CustomerTransaction trans)
+        {
 
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            List<Goal> goals = await db.Goals.Where(g => g.AccountNum == trans.AccountNum).ToListAsync();
+
+            foreach(Goal goal in goals)
+            {
+                bool resetvalue = false;
+
+                //Remove Goal from DB
+                db.Goals.Remove(goal);
+                await db.SaveChangesAsync();
+
+                //Update Goal Amount
+                if(trans.TransactionType == TransactionTypeEnum.Credit)
+                {
+                    goal.StartValue += trans.Amount;
+                }else if(trans.TransactionType == TransactionTypeEnum.Debit){
+                    goal.StartValue -= trans.Amount;
+                }
+
+                //Check Completion criteria
+                if (goal.StartValue >= goal.LimitValue)
+                {
+                    goal.Completed = true;
+                    goal.StartValue = goal.LimitValue;
+                    await ActivateAchievementAsync(db, uid, AchievementType.COMPLETE_GOAL);
+                }
+
+                Goal resetGoal = goal;
+
+                if (goal.StartDate >= goal.EndDate || (goal.Completed))
+                {
+                    if(goal.GoalType == GoalTypeEnum.Recurring)
+                    {
+                        resetvalue = true;
+                        resetGoal.StartDate = DateTime.Now;
+                        resetGoal.StartValue = 0;
+                        resetGoal.Completed = false;
+
+                        switch (resetGoal.GoalPeriod)
+                        {
+                            case GoalPeriodEnum.Weekly:
+                                resetGoal.EndDate = resetGoal.StartDate.AddDays(7);
+                                break;
+
+                            case GoalPeriodEnum.Monthly:
+                                resetGoal.EndDate = resetGoal.StartDate.AddMonths(1);
+                                break;
+
+                            case GoalPeriodEnum.Yearly:
+                                resetGoal.EndDate = resetGoal.StartDate.AddYears(1);
+                                break;
+                        }
+                    }
+
+                }
+
+                await ActivateAchievementAsync(db, uid, AchievementType.UPDATE_GOAL);
+
+                if (resetvalue)
+                    db.Goals.Add(resetGoal);
+                else
+                    db.Goals.Add(goal);
+
+                await db.SaveChangesAsync();
+            }
+
+            await ActivateAchievementAsync(db, uid, AchievementType.ADD_TRANSACTION);
+        }
+
+
+        public static async Task<Decimal> CalculateBalances(string uid, string accountNumber)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            List<CustomerAccount> userAccs = await db.CustomersAccounts.Where(u => u.AccountNum == accountNumber).Where(u => u.UserID == uid).ToListAsync();
+
+            CustomerAccount userAcc = userAccs.ElementAt(0);
+
+            Decimal currBalance = userAcc.Balance;
+
+
+            List<CustomerTransaction> transList = await db.CustomerTransactions
+                .Where(a => a.AccountNum == accountNumber)
+                .OrderBy(data => data.TransactionDate)
+                .ToListAsync();
+
+            foreach (CustomerTransaction ct in transList)
+            {
+                if (ct.TransactionType == TransactionTypeEnum.Credit)
+                    currBalance += ct.Amount;
+                else
+                    currBalance -= ct.Amount;
+            }
+
+            return currBalance;
+        }
     }
+
+
 }

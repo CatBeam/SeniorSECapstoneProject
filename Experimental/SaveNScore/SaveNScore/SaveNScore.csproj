@@ -302,7 +302,6 @@
     <Content Include="Views\CustomerAccount\Create.cshtml" />
     <Content Include="Views\CustomerAccount\Delete.cshtml" />
     <Content Include="Views\CustomerAccount\Index.cshtml" />
-    <Content Include="Views\Achievement\Index.cshtml" />
     <Content Include="Views\CustomerAccount\_BalanceHistoryChart.cshtml" />
     <Content Include="Views\StepLineChart\Index.cshtml" />
     <Content Include="Views\CustomerAccount\AccountGoals.cshtml" />
@@ -311,8 +310,9 @@
     <Content Include="Views\CustomerAccount\_TransactionList.cshtml" />
     <Content Include="Views\CustomerAccount\_SpendingCategoriesChart.cshtml" />
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
-    <Content Include="Views\Achievement\Index.cshtml" />
     <Content Include="Views\CustomerAccount\CreateRecurringGoal.cshtml" />
+    <Content Include="Views\CustomerAccount\AddTransaction.cshtml" />
+    <Content Include="Views\Achievement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
