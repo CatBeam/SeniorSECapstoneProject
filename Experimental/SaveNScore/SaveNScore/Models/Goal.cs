@@ -89,6 +89,8 @@ namespace SaveNScore.Models
                 yield return new ValidationResult("The Ending Date cannot be in the past. No time travel allowed.");
             }
 
+            //if((GoalType == GoalTypeEnum.Recurring) && GoalType == )
+
         }
         #endregion Validations
 

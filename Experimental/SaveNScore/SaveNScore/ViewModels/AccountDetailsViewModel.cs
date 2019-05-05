@@ -13,5 +13,13 @@ namespace SaveNScore.ViewModels
         public List<DataPoint> LineChartDataPoints { get; set; }
         // datapoints for pie chart
         public List<PieDataPoint> PieChartDataPoints { get; set; }
+        public List<TransactionWithCategory> TransactionsWithCategories { get; set; }
     }
+
+    public class TransactionWithCategory
+    {
+        public int TransactionID { get; set; }
+        public SpendingCategory spendingCategory { get; set; }
+    }
+
 }

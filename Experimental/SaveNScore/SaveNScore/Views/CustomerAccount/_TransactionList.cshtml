@@ -1,4 +1,7 @@
-﻿@model IEnumerable<SaveNScore.Models.CustomerTransaction>
+﻿@model SaveNScore.ViewModels.AccountDetailsViewModel
+
+
+@*@model IEnumerable<SaveNScore.Models.CustomerTransaction>*@
 
 @{
     Layout = null;
@@ -9,24 +12,31 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AccountNum)
+            Account Number
+            @*@Html.DisplayNameFor(model => model.CustomerTransactions.AccountNum)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Amount)
+            Amount
+            @*@Html.DisplayNameFor(model => model.Amount)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TransactionType)
+            Transaction Type
+            @*@Html.DisplayNameFor(model => model.TransactionType)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TransactionDate)
+            Transaction Date
+            @*@Html.DisplayNameFor(model => model.TransactionDate)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Description
+            @*@Html.DisplayNameFor(model => model.Description)*@
         </th>
-        <th></th>
+        <th>
+            Category
+        </th>
     </tr>
 
-    @foreach (var item in Model.OrderByDescending(a => a.TransactionDate))
+    @foreach (var item in Model.CustomerTransactions.OrderByDescending(a => a.TransactionDate))
     {
         <tr>
             <td>
@@ -43,6 +53,15 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            
+            <td>
+                @*@{
+                    var displayValue = Enum.GetName(typeof(SpendingCategory), (Model.TransactionsWithCategories
+                .Where(v => v.TransactionID == item.TransactionID)
+                .Select(v => v.spendingCategory)));
+                }
+                @displayValue*@
             </td>
         </tr>
     }
