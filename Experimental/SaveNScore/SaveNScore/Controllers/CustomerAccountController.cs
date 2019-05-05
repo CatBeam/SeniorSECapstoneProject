@@ -33,7 +33,7 @@ namespace SaveNScore.Controllers
             var userAccs = customerAccs.Where(u => u.UserID == uid);
             List<CustomerAccount> userAccsList = await userAccs.ToListAsync();
 
-            foreach(CustomerAccount account in userAccsList)
+            foreach (CustomerAccount account in userAccsList)
             {
                 // loop through transactions to calculate balance
                 Decimal currBalance = account.Balance;
@@ -119,9 +119,9 @@ namespace SaveNScore.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index", "CustomerAccount");
         }
-        
-        /*START OF HOME/CUSTOMERACCOUNT/ACCOUNTGOALS METHODS */
 
+        /*START OF HOME/CUSTOMERACCOUNT/ACCOUNTGOALS METHODS */
+        #region GoalsFunctions
 
         [HttpGet]
         [ActionName("AccountGoals")] //In case we change the name of the function later on
@@ -149,24 +149,25 @@ namespace SaveNScore.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateSingleGoal([Bind(Include = "AccountNum,StartDate,EndDate,StartValue,LimitValue,Description")] Goal userGoal)
         {
+            userGoal.GoalType = GoalTypeEnum.SaveByDate;
+
             if (ModelState.IsValid)
             {
                 //Get User's ID and attach to Goal
                 var uid = User.Identity.GetUserId();
                 userGoal.UserID = uid;
-                userGoal.GoalType = GoalTypeEnum.SaveByDate;
-                userGoal.GoalPeriod = GoalPeriodEnum.Single;
+                //userGoal.GoalType = GoalTypeEnum.SaveByDate;
                 userGoal.Completed = false;
-
+                userGoal.GoalPeriod = GoalPeriodEnum.Single;
                 //Add Goal to DB and Save Changes
                 db.Goals.Add(userGoal);
                 await db.SaveChangesAsync();
-                
+
                 return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
 
@@ -184,42 +185,57 @@ namespace SaveNScore.Controllers
             var uid = User.Identity.GetUserId();
 
             //Get User's Accounts as SelectListItem
-            ViewData["accounts"] = await UserUtility.GetUserAccountsList(db, uid);
+            ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
 
             return View();
         }
         
-        /*
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateRecurringGoal([Bind(Include = "AccountNum,GoalPeriod,LimitValue,StartDate,Description")] Goal userGoal)
         {
+            var uid = User.Identity.GetUserId();
+            userGoal.GoalType = GoalTypeEnum.Recurring;
+            // Validate that Goal is recurring
+            /*Placed here to comply w/ EndDate greater than StartDate*/
+            switch (userGoal.GoalPeriod)
+            {
+                case GoalPeriodEnum.Weekly:
+                    userGoal.EndDate = userGoal.StartDate.AddDays(7);
+                    break;
+
+                case GoalPeriodEnum.Monthly:
+                    userGoal.EndDate = userGoal.StartDate.AddMonths(1);
+                    break;
+
+                case GoalPeriodEnum.Yearly:
+                    userGoal.EndDate = userGoal.StartDate.AddYears(1);
+                    break;
+
+                default:
+                    ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
+                    return View(userGoal);
+            }
+
+            //Validate rest of model
             if (ModelState.IsValid)
             {
-                var uid = User.Identity.GetUserId();
+                //Assign other starting values
                 userGoal.UserID = uid;
                 userGoal.StartValue = 0;
-                userGoal.GoalType = GoalTypeEnum.Recurring;
+                //userGoal.GoalType = GoalTypeEnum.Recurring;
                 userGoal.Completed = false;
 
-                switch (userGoal.GoalPeriod)
-                {
-                    case GoalPeriodEnum.Weekly:
-                        userGoal.EndDate = userGoal.StartDate.AddDays(7);
-                        break;
-
-                    case GoalPeriodEnum.Monthly:
-                        userGoal.EndDate = userGoal.EndDate.AddMonths(1);
-                        break;
-
-                    case GoalPeriodEnum.Yearly:
-                        userGoal.EndDate = userGoal.EndDate.AddYears(1);
-                        break;
-                }
-
+                //Save changes and redirect
+                db.Goals.Add(userGoal);
+                await db.SaveChangesAsync();
+                return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
+            ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
+            return View(userGoal);
         }
-        */
+        
 
         [HttpGet]
         [Authorize]
@@ -228,7 +244,7 @@ namespace SaveNScore.Controllers
             Goal goal = await db.Goals.FindAsync(id);
             return View(goal);
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -237,7 +253,7 @@ namespace SaveNScore.Controllers
             //Find Goal to Delete
             var goalsTable = db.Goals;
             Goal goalToDelete = await goalsTable.FindAsync(id);
-            
+
             //Extract account number for redirect
             string accountNumber = goalToDelete.AccountNum;
 
@@ -247,24 +263,12 @@ namespace SaveNScore.Controllers
 
             return RedirectToAction("AccountGoals/" + accountNumber, "CustomerAccount");
         }
-        
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+
+        #endregion GoalsFunctions
 
         public async Task<ActionResult> Details(String id)
         {
             var model = new AccountDetailsViewModel();
-
-            //if (String.IsNullOrEmpty(id))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
 
             //Find all Transactions matching the account number (id)
             var ctList = db.CustomerTransactions
@@ -278,7 +282,6 @@ namespace SaveNScore.Controllers
 
             List<DataPoint> lineDataPoints = new List<DataPoint>();
 
-            // TODO: Get starting balance from database
             var startingBalance = db.CustomersAccounts
                 .Where(a => a.AccountNum == id)
                 .Select(a => a.Balance)
@@ -293,12 +296,21 @@ namespace SaveNScore.Controllers
 
             foreach (var customerTransaction in model.CustomerTransactions)
             {
-                var transCat = db.TransactionCategories
-                .Where(a => a.TransDescription == customerTransaction.Description)
-                .Select(a => a.SpendingCategory)
-                .FirstOrDefault();
+                SpendingCategory transCatEnum = (SpendingCategory)9;
+
+                String transCat = "Credit";
+
+                if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                {
+                    transCatEnum = db.TransactionCategories
+                        .Where(a => a.TransDescription == customerTransaction.Description)
+                        .Select(a => a.SpendingCategory)
+                        .FirstOrDefault();
+                    transCat = Enum.GetName(typeof(SpendingCategory), transCatEnum);
+                }
 
                 TransactionWithCategory transCatEntry = new TransactionWithCategory();
+
                 transCatEntry.TransactionID = customerTransaction.TransactionID;
                 transCatEntry.spendingCategory = transCat;
                 transLookup.Add(transCatEntry);
@@ -308,14 +320,14 @@ namespace SaveNScore.Controllers
                     lineDataPoints.Add(new DataPoint((tempDate.Subtract(utcDate).TotalMilliseconds), currBalance));
                     tempDate = customerTransaction.TransactionDate;
                 }
-                    if (customerTransaction.TransactionType == TransactionTypeEnum.Credit)
-                    {
-                        currBalance = currBalance + customerTransaction.Amount;
-                    }
-                    else if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
-                    {
-                        currBalance = currBalance - customerTransaction.Amount;
-                    }  
+                if (customerTransaction.TransactionType == TransactionTypeEnum.Credit)
+                {
+                    currBalance = currBalance + customerTransaction.Amount;
+                }
+                else if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                {
+                    currBalance = currBalance - customerTransaction.Amount;
+                }
             }
 
             model.TransactionsWithCategories = transLookup;
@@ -339,7 +351,7 @@ namespace SaveNScore.Controllers
 
             model.PieChartDataPoints = pieDataPoints;
             List<Decimal> amtByCat = new List<Decimal>();
-            for (int i = 0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 amtByCat.Add(0);
             }
@@ -347,9 +359,11 @@ namespace SaveNScore.Controllers
             // loop through transactions, update amount for each category
             foreach (var customerTransaction in model.CustomerTransactions)
             {
+                SpendingCategory category = new SpendingCategory();
+
                 if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
                 {
-                    var category = transCategories
+                    category = transCategories
                         .Where(t => t.TransDescription == customerTransaction.Description)
                         .Select(t => t.SpendingCategory)
                         .FirstOrDefault();
@@ -371,7 +385,7 @@ namespace SaveNScore.Controllers
                 percentByCat.Add(0);
             }
 
-            for (int i = 0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 percentByCat[i] = Math.Round(((double)(amtByCat[i] / sum) * 100), 2);
                 pieDataPoints[i].Y = percentByCat[i];
@@ -379,6 +393,46 @@ namespace SaveNScore.Controllers
             }
 
             return View(model);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> AddTransaction(string id)
+        {
+            var uid = User.Identity.GetUserId();
+            ViewData["transAccountNum"] = await UserUtility.GetUserAccountsList(db, uid);
+            return View();
+        }
+        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddTransaction([Bind(Include = "AccountNum,Amount,TransactionType,Description")] CustomerTransaction cusTrans)
+        {
+            var uid = User.Identity.GetUserId();
+            ViewData["transAccountNum"] = await UserUtility.GetUserAccountsList(db, uid);
+
+            if (ModelState.IsValid)
+            {
+                cusTrans.TransactionDate = DateTime.Now;
+
+                // Update Goals
+                await UserUtility.UpdateGoal(uid, cusTrans);
+                db.CustomerTransactions.Add(cusTrans);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "CustomerAccount");
+            }
+
+            return View(cusTrans);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 

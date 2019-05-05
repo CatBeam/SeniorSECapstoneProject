@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace SaveNScore.Models
@@ -68,12 +69,12 @@ namespace SaveNScore.Models
         IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
         {
             DateTime today = DateTime.Now;
-
-            if (StartDate > EndDate)
+            /*
+            if ((StartDate > EndDate) && (GoalType == GoalTypeEnum.SaveByDate))
             {
                 yield return new ValidationResult("Ending Date must be greater than Starting Date");
             }
-
+            */
             if (StartValue > LimitValue)
             {
                 yield return new ValidationResult("Limiting Value must be greater than Starting Value");
@@ -83,13 +84,13 @@ namespace SaveNScore.Models
             {
                 yield return new ValidationResult("The Starting Value cannot be a negative number");
             }
-
-            if (EndDate < today)
+            /*
+            if ((EndDate < today) && (GoalType == GoalTypeEnum.SaveByDate))
             {
                 yield return new ValidationResult("The Ending Date cannot be in the past. No time travel allowed.");
             }
+            */
 
-            //if((GoalType == GoalTypeEnum.Recurring) && GoalType == )
 
         }
         #endregion Validations
@@ -98,7 +99,10 @@ namespace SaveNScore.Models
 
     public enum GoalTypeEnum
     {
-        SaveByDate, Recurring
+        [Display(Name = "Save By Date")]
+        SaveByDate,
+
+        Recurring
     }
     
     public enum GoalPeriodEnum

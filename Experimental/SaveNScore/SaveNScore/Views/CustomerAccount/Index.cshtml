@@ -5,9 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
+<h2>Accounts</h2>
+
+<p style="display:inline">
+<p style="display:inline">@Html.ActionLink("Create New", "Create")</p> 
+
+&nbsp;&nbsp;
+
+<p style="display:inline">
+    @Html.ActionLink("Add a Transaction", "AddTransaction")</pstyle="display:inline">
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -35,9 +43,8 @@
                 @Html.DisplayFor(modelItem => item.Balance)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UserID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.AccountNum }) |
-                @Html.ActionLink("View Account Goals", "AccountGoals", new { id = item.AccountNum})
+                @Html.ActionLink("View Account Goals", "AccountGoals", new { id = item.AccountNum })
             </td>
         </tr>
     }

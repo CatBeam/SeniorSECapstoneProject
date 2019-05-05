@@ -13,23 +13,18 @@
     <tr>
         <th>
             Account Number
-            @*@Html.DisplayNameFor(model => model.CustomerTransactions.AccountNum)*@
         </th>
         <th>
             Amount
-            @*@Html.DisplayNameFor(model => model.Amount)*@
         </th>
         <th>
             Transaction Type
-            @*@Html.DisplayNameFor(model => model.TransactionType)*@
         </th>
         <th>
             Transaction Date
-            @*@Html.DisplayNameFor(model => model.TransactionDate)*@
         </th>
         <th>
             Description
-            @*@Html.DisplayNameFor(model => model.Description)*@
         </th>
         <th>
             Category
@@ -56,12 +51,13 @@
             </td>
             
             <td>
-                @*@{
-                    var displayValue = Enum.GetName(typeof(SpendingCategory), (Model.TransactionsWithCategories
+                @{
+                    var displayValue = (Model.TransactionsWithCategories
                 .Where(v => v.TransactionID == item.TransactionID)
-                .Select(v => v.spendingCategory)));
+                .Select(v => v.spendingCategory)
+                .FirstOrDefault());
                 }
-                @displayValue*@
+                @displayValue
             </td>
         </tr>
     }
