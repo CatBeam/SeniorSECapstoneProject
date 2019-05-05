@@ -33,7 +33,7 @@ namespace SaveNScore.Controllers
             var userAccs = customerAccs.Where(u => u.UserID == uid);
             List<CustomerAccount> userAccsList = await userAccs.ToListAsync();
 
-            foreach(CustomerAccount account in userAccsList)
+            foreach (CustomerAccount account in userAccsList)
             {
                 // loop through transactions to calculate balance
                 Decimal currBalance = account.Balance;
@@ -149,7 +149,7 @@ namespace SaveNScore.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateSingleGoal([Bind(Include = "AccountNum,StartDate,EndDate,StartValue,LimitValue,Description")] Goal userGoal)
@@ -167,7 +167,7 @@ namespace SaveNScore.Controllers
                 //Add Goal to DB and Save Changes
                 db.Goals.Add(userGoal);
                 await db.SaveChangesAsync();
-                
+
                 return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
 
@@ -244,7 +244,7 @@ namespace SaveNScore.Controllers
             Goal goal = await db.Goals.FindAsync(id);
             return View(goal);
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -253,7 +253,7 @@ namespace SaveNScore.Controllers
             //Find Goal to Delete
             var goalsTable = db.Goals;
             Goal goalToDelete = await goalsTable.FindAsync(id);
-            
+
             //Extract account number for redirect
             string accountNumber = goalToDelete.AccountNum;
 
@@ -270,11 +270,6 @@ namespace SaveNScore.Controllers
         {
             var model = new AccountDetailsViewModel();
 
-            //if (String.IsNullOrEmpty(id))
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-
             //Find all Transactions matching the account number (id)
             var ctList = db.CustomerTransactions
                 .Where(a => a.AccountNum == id)
@@ -287,7 +282,6 @@ namespace SaveNScore.Controllers
 
             List<DataPoint> lineDataPoints = new List<DataPoint>();
 
-            // TODO: Get starting balance from database
             var startingBalance = db.CustomersAccounts
                 .Where(a => a.AccountNum == id)
                 .Select(a => a.Balance)
@@ -302,12 +296,21 @@ namespace SaveNScore.Controllers
 
             foreach (var customerTransaction in model.CustomerTransactions)
             {
-                var transCat = db.TransactionCategories
-                .Where(a => a.TransDescription == customerTransaction.Description)
-                .Select(a => a.SpendingCategory)
-                .FirstOrDefault();
+                SpendingCategory transCatEnum = (SpendingCategory)9;
+
+                String transCat = "Credit";
+
+                if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                {
+                    transCatEnum = db.TransactionCategories
+                        .Where(a => a.TransDescription == customerTransaction.Description)
+                        .Select(a => a.SpendingCategory)
+                        .FirstOrDefault();
+                    transCat = Enum.GetName(typeof(SpendingCategory), transCatEnum);
+                }
 
                 TransactionWithCategory transCatEntry = new TransactionWithCategory();
+
                 transCatEntry.TransactionID = customerTransaction.TransactionID;
                 transCatEntry.spendingCategory = transCat;
                 transLookup.Add(transCatEntry);
@@ -317,14 +320,14 @@ namespace SaveNScore.Controllers
                     lineDataPoints.Add(new DataPoint((tempDate.Subtract(utcDate).TotalMilliseconds), currBalance));
                     tempDate = customerTransaction.TransactionDate;
                 }
-                    if (customerTransaction.TransactionType == TransactionTypeEnum.Credit)
-                    {
-                        currBalance = currBalance + customerTransaction.Amount;
-                    }
-                    else if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
-                    {
-                        currBalance = currBalance - customerTransaction.Amount;
-                    }  
+                if (customerTransaction.TransactionType == TransactionTypeEnum.Credit)
+                {
+                    currBalance = currBalance + customerTransaction.Amount;
+                }
+                else if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
+                {
+                    currBalance = currBalance - customerTransaction.Amount;
+                }
             }
 
             model.TransactionsWithCategories = transLookup;
@@ -348,7 +351,7 @@ namespace SaveNScore.Controllers
 
             model.PieChartDataPoints = pieDataPoints;
             List<Decimal> amtByCat = new List<Decimal>();
-            for (int i = 0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 amtByCat.Add(0);
             }
@@ -356,9 +359,11 @@ namespace SaveNScore.Controllers
             // loop through transactions, update amount for each category
             foreach (var customerTransaction in model.CustomerTransactions)
             {
+                SpendingCategory category = new SpendingCategory();
+
                 if (customerTransaction.TransactionType == TransactionTypeEnum.Debit)
                 {
-                    var category = transCategories
+                    category = transCategories
                         .Where(t => t.TransDescription == customerTransaction.Description)
                         .Select(t => t.SpendingCategory)
                         .FirstOrDefault();
@@ -380,7 +385,7 @@ namespace SaveNScore.Controllers
                 percentByCat.Add(0);
             }
 
-            for (int i = 0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 percentByCat[i] = Math.Round(((double)(amtByCat[i] / sum) * 100), 2);
                 pieDataPoints[i].Y = percentByCat[i];
