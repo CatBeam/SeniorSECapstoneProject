@@ -17,6 +17,7 @@ namespace SaveNScore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        // index accounts when logged in
         public async Task<ActionResult> Index()
         {
             //Create DB CustomerAccount Table Instance
