@@ -5,12 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AccountGoals</h2>
+<h2>Account Goals</h2>
 
-<p>
+<p style="display:inline">
 @Html.ActionLink("Create New Recurring Goal", "CreateRecurringGoal")
 </p>
-<p>
+&nbsp;&nbsp;
+<p style="display:inline">
 @Html.ActionLink("Create New Single Goal", "CreateSingleGoal")
 </p>
 
@@ -76,7 +77,6 @@
             @Html.DisplayFor(modelItem => item.Completed)
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", new { id=item.GoalID }) |
             @Html.ActionLink("Delete", "DeleteGoal", new { id=item.GoalID })
         </td>
     </tr>

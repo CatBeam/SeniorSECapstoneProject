@@ -119,9 +119,9 @@ namespace SaveNScore.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index", "CustomerAccount");
         }
-        
-        /*START OF HOME/CUSTOMERACCOUNT/ACCOUNTGOALS METHODS */
 
+        /*START OF HOME/CUSTOMERACCOUNT/ACCOUNTGOALS METHODS */
+        #region GoalsFunctions
 
         [HttpGet]
         [ActionName("AccountGoals")] //In case we change the name of the function later on
@@ -154,15 +154,16 @@ namespace SaveNScore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateSingleGoal([Bind(Include = "AccountNum,StartDate,EndDate,StartValue,LimitValue,Description")] Goal userGoal)
         {
+            userGoal.GoalType = GoalTypeEnum.SaveByDate;
+
             if (ModelState.IsValid)
             {
                 //Get User's ID and attach to Goal
                 var uid = User.Identity.GetUserId();
                 userGoal.UserID = uid;
-                userGoal.GoalType = GoalTypeEnum.SaveByDate;
-                userGoal.GoalPeriod = GoalPeriodEnum.Single;
+                //userGoal.GoalType = GoalTypeEnum.SaveByDate;
                 userGoal.Completed = false;
-
+                userGoal.GoalPeriod = GoalPeriodEnum.Single;
                 //Add Goal to DB and Save Changes
                 db.Goals.Add(userGoal);
                 await db.SaveChangesAsync();
@@ -184,42 +185,57 @@ namespace SaveNScore.Controllers
             var uid = User.Identity.GetUserId();
 
             //Get User's Accounts as SelectListItem
-            ViewData["accounts"] = await UserUtility.GetUserAccountsList(db, uid);
+            ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
 
             return View();
         }
         
-        /*
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateRecurringGoal([Bind(Include = "AccountNum,GoalPeriod,LimitValue,StartDate,Description")] Goal userGoal)
         {
+            var uid = User.Identity.GetUserId();
+            userGoal.GoalType = GoalTypeEnum.Recurring;
+            // Validate that Goal is recurring
+            /*Placed here to comply w/ EndDate greater than StartDate*/
+            switch (userGoal.GoalPeriod)
+            {
+                case GoalPeriodEnum.Weekly:
+                    userGoal.EndDate = userGoal.StartDate.AddDays(7);
+                    break;
+
+                case GoalPeriodEnum.Monthly:
+                    userGoal.EndDate = userGoal.StartDate.AddMonths(1);
+                    break;
+
+                case GoalPeriodEnum.Yearly:
+                    userGoal.EndDate = userGoal.StartDate.AddYears(1);
+                    break;
+
+                default:
+                    ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
+                    return View(userGoal);
+            }
+
+            //Validate rest of model
             if (ModelState.IsValid)
             {
-                var uid = User.Identity.GetUserId();
+                //Assign other starting values
                 userGoal.UserID = uid;
                 userGoal.StartValue = 0;
-                userGoal.GoalType = GoalTypeEnum.Recurring;
+                //userGoal.GoalType = GoalTypeEnum.Recurring;
                 userGoal.Completed = false;
 
-                switch (userGoal.GoalPeriod)
-                {
-                    case GoalPeriodEnum.Weekly:
-                        userGoal.EndDate = userGoal.StartDate.AddDays(7);
-                        break;
-
-                    case GoalPeriodEnum.Monthly:
-                        userGoal.EndDate = userGoal.EndDate.AddMonths(1);
-                        break;
-
-                    case GoalPeriodEnum.Yearly:
-                        userGoal.EndDate = userGoal.EndDate.AddYears(1);
-                        break;
-                }
-
+                //Save changes and redirect
+                db.Goals.Add(userGoal);
+                await db.SaveChangesAsync();
+                return Redirect("AccountGoals/" + userGoal.AccountNum);
             }
+            ViewData["accountNums"] = await UserUtility.GetUserAccountsList(db, uid);
+            return View(userGoal);
         }
-        */
+        
 
         [HttpGet]
         [Authorize]
@@ -247,15 +263,8 @@ namespace SaveNScore.Controllers
 
             return RedirectToAction("AccountGoals/" + accountNumber, "CustomerAccount");
         }
-        
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+
+        #endregion GoalsFunctions
 
         public async Task<ActionResult> Details(String id)
         {
@@ -379,6 +388,46 @@ namespace SaveNScore.Controllers
             }
 
             return View(model);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> AddTransaction(string id)
+        {
+            var uid = User.Identity.GetUserId();
+            ViewData["transAccountNum"] = await UserUtility.GetUserAccountsList(db, uid);
+            return View();
+        }
+        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddTransaction([Bind(Include = "AccountNum,Amount,TransactionType,Description")] CustomerTransaction cusTrans)
+        {
+            var uid = User.Identity.GetUserId();
+            ViewData["transAccountNum"] = await UserUtility.GetUserAccountsList(db, uid);
+
+            if (ModelState.IsValid)
+            {
+                cusTrans.TransactionDate = DateTime.Now;
+
+                // Update Goals
+                await UserUtility.UpdateGoal(uid, cusTrans);
+                db.CustomerTransactions.Add(cusTrans);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "CustomerAccount");
+            }
+
+            return View(cusTrans);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 
