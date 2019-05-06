@@ -14,8 +14,6 @@ namespace SaveNScore.Models
     //TODO: Details Page -> List of all Account Transactions for the selected Account Number
     public class CustomerAccount
     {
-        //[ForeignKey("Customer")]
-        
         [Key, Column(Order = 0)]
         public string UserID { get; set; }
 
