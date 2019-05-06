@@ -23,7 +23,7 @@ namespace SaveNScore.Controllers
             //Get All User Achievements
             var userAchievements = db.Achievements.Where(u => u.UserID == uid);
 
-            return View(await userAchievements.ToListAsync());
+            return View(await userAchievements.ToListAsync()); 
         }
     }
 }
