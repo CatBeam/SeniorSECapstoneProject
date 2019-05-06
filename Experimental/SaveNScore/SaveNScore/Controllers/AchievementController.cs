@@ -10,6 +10,7 @@ using SaveNScore.Models;
 
 namespace SaveNScore.Controllers
 {
+    [Authorize]
     public class AchievementController : Controller
     {
         //Create DB Instance
@@ -23,7 +24,7 @@ namespace SaveNScore.Controllers
             //Get All User Achievements
             var userAchievements = db.Achievements.Where(u => u.UserID == uid);
 
-            return View(await userAchievements.ToListAsync());
+            return PartialView(await userAchievements.ToListAsync());
         }
     }
 }

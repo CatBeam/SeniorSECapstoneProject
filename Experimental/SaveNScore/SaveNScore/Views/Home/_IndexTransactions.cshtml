@@ -7,6 +7,7 @@
     Layout = null;
 }
 
+<h2 align="center">Account Summary</h2>
 <table class="table">
     <tr>
         <th>
@@ -29,9 +30,6 @@
             Description
             @*@Html.DisplayNameFor(model => model.Description)*@
         </th>
-        <th>
-            Category
-        </th>
     </tr>
 
     @foreach (var item in Model.CustomerTransactions.Take(10).OrderByDescending(a => a.TransactionDate))
@@ -52,16 +50,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-
-            <td>
-                @*@{
-                        var displayValue = Enum.GetName(typeof(SpendingCategory), (Model.TransactionsWithCategories
-                    .Where(v => v.TransactionID == item.TransactionID)
-                    .Select(v => v.spendingCategory)));
-                    }
-                    @displayValue*@
-            </td>
         </tr>
     }
-
 </table>

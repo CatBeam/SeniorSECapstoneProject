@@ -33,6 +33,7 @@
         display: table-cell;
         padding: 3px 10px;
         text-align: left;
+        max-width: 50%;
     }
 
     .tableHeading {
@@ -63,15 +64,13 @@
                         @foreach (var item in Model)
                         {
                             <at>Account Type: </at> @Html.DisplayFor(modelItem => item.AccountType)<br />
-                            <at>Account Number: </at> <a href="JavaScript:void(0);" class="selected" data-id="">@Html.DisplayFor(modelItem => item.AccountNum)</a><br />
-                            <at>Account Balance: </at> @Html.DisplayFor(modelItem => item.Balance)<br /><br />
-                        }
+                            <at>Account Number: </at> <a href="JavaScript:void(0);" class="selected" data-id="">@Html.DisplayFor(modelItem => item.AccountNum)</a><br /><br />
+                                }
                     </div>
-                    <div class="tableCell" id= "divid"></div>
+                    <div class="tableCell" id="divAch">This is where Achievements will be listed</div>
                 </div>
                 <div class="tableRow">
-                    <div class="tableCell">This is where Achievements will be listed</div>
-                    <div class="tableCell">This will list current goals</div>
+                    <div class="tableCell" id="divid">This is where Transactions are summarized after clicking an account number.</div>
                 </div>
             </div>
         </div>
@@ -110,6 +109,18 @@ else
 
 <script src="/Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+    $(document).ready(function () {
+        var temp = "@(Url.Action("IndexAchievements"))";
+        console.log(temp);
+        $.ajax({
+            type: "GET",
+            url: temp,
+            cache: false,
+            success: function (response) {
+                $("#divAch").html(response);
+            }
+        })
+    });
     $(".selected").each(function (index) {
         $(this).click(function (evt) {
             var accId = $(evt.target).text();

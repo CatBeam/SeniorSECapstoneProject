@@ -30,6 +30,7 @@ namespace SaveNScore.Controllers
             return View(await userAccs.ToListAsync());
         }
 
+        // display transactions on index page for single page use
         [HttpGet]
         public async Task<ActionResult> IndexTransactions(string accountId)
         {
@@ -38,6 +39,7 @@ namespace SaveNScore.Controllers
             // logic for getting model and data
             var transactions = db.CustomerTransactions;
             var customerAccs = db.CustomersAccounts;
+
 
             // check if user is authorized to access account, if they arent dont let them see account info
             var uid = User.Identity.GetUserId();
@@ -49,8 +51,21 @@ namespace SaveNScore.Controllers
             {
                 var finalTransactions = transactions.Where(t => t.AccountNum == accountId);
                 model.CustomerTransactions = await finalTransactions.ToListAsync();
+
                 return PartialView("_IndexTransactions", model);
             }
+        }
+
+        [HttpGet]
+        // display achievements for single page use on index
+        public async Task<ActionResult> IndexAchievements()
+        {
+            var uid = User.Identity.GetUserId();
+            await UserUtility.UpdateAchievements(User.Identity.GetUserId());
+            //Get All User Achievements
+            var userAchievements = db.Achievements.Where(u => u.UserID == uid);
+
+            return PartialView("_IndexAchievements", await userAchievements.ToListAsync());
         }
 
         public ActionResult About()

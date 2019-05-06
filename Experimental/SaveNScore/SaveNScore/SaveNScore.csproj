@@ -312,8 +312,10 @@
     <Content Include="Views\CustomerAccount\DeleteGoal.cshtml" />
     <Content Include="Views\CustomerAccount\CreateRecurringGoal.cshtml" />
     <Content Include="Views\CustomerAccount\AddTransaction.cshtml" />
-
     <Content Include="Views\Home\_IndexTransactions.cshtml" />
+    <Content Include="Views\Home\_IndexAchievements.cshtml" />
+    <Content Include="Views\Index.cshtml" />
+    <Content Include="Views\Achievement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
