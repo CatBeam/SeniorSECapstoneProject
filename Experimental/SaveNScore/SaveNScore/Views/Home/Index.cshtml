@@ -33,7 +33,7 @@
         display: table-cell;
         padding: 3px 10px;
         text-align: left;
-        max-width: 50%;
+        max-width: 500px;
     }
 
     .tableHeading {
@@ -67,7 +67,26 @@
                             <at>Account Number: </at> <a href="JavaScript:void(0);" class="selected" data-id="">@Html.DisplayFor(modelItem => item.AccountNum)</a><br /><br />
                                 }
                     </div>
-                    <div class="tableCell" id="divAch">This is where Achievements will be listed</div>
+                    <div class="tableCell" id="divAch">
+                        This is where Achievements are listed. <br /> 
+                        If you see this, something is either broken or the database is slow.
+                    <script>
+                        // script where achievment controller is called using ajax request. Put here so it doesn't load without user login.
+                        $(document).ready(function () {
+                           
+                            var temp = "@(Url.Action("IndexAchievements"))";
+                            console.log(temp);
+                            $.ajax({
+                                type: "GET",
+                                url: temp,
+                                cache: false,
+                                success: function (response) {
+                                    $("#divAch").html(response);
+                                }
+                            })
+                        });
+                        </script>
+                    </div>
                 </div>
                 <div class="tableRow">
                     <div class="tableCell" id="divid">This is where Transactions are summarized after clicking an account number.</div>
@@ -109,18 +128,7 @@ else
 
 <script src="/Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        var temp = "@(Url.Action("IndexAchievements"))";
-        console.log(temp);
-        $.ajax({
-            type: "GET",
-            url: temp,
-            cache: false,
-            success: function (response) {
-                $("#divAch").html(response);
-            }
-        })
-    });
+    // script that sends ajax GET to controller and retrieves a list of transactions after clicking on account
     $(".selected").each(function (index) {
         $(this).click(function (evt) {
             var accId = $(evt.target).text();

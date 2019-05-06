@@ -49,7 +49,7 @@ namespace SaveNScore.Controllers
             }
             else
             {
-                var finalTransactions = transactions.Where(t => t.AccountNum == accountId);
+                var finalTransactions = transactions.Where(t => t.AccountNum == accountId).OrderByDescending(t => t.TransactionDate);
                 model.CustomerTransactions = await finalTransactions.ToListAsync();
 
                 return PartialView("_IndexTransactions", model);
