@@ -17,6 +17,7 @@ namespace SaveNScore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        // index accounts when logged in
         public async Task<ActionResult> Index()
         {
             //Create DB CustomerAccount Table Instance
@@ -27,6 +28,44 @@ namespace SaveNScore.Controllers
             var userAccs = customerAccs.Where(u => u.UserID == uid);
 
             return View(await userAccs.ToListAsync());
+        }
+
+        // display transactions on index page for single page use
+        [HttpGet]
+        public async Task<ActionResult> IndexTransactions(string accountId)
+        {
+            var model = new AccountDetailsViewModel();
+
+            // logic for getting model and data
+            var transactions = db.CustomerTransactions;
+            var customerAccs = db.CustomersAccounts;
+
+
+            // check if user is authorized to access account, if they arent dont let them see account info
+            var uid = User.Identity.GetUserId();
+            if (!customerAccs.Where(u => u.UserID == uid && u.AccountNum == accountId).Any())
+            {
+                return PartialView();
+            }
+            else
+            {
+                var finalTransactions = transactions.Where(t => t.AccountNum == accountId).OrderByDescending(t => t.TransactionDate);
+                model.CustomerTransactions = await finalTransactions.ToListAsync();
+
+                return PartialView("_IndexTransactions", model);
+            }
+        }
+
+        [HttpGet]
+        // display achievements for single page use on index
+        public async Task<ActionResult> IndexAchievements()
+        {
+            var uid = User.Identity.GetUserId();
+            await UserUtility.UpdateAchievements(User.Identity.GetUserId());
+            //Get All User Achievements
+            var userAchievements = db.Achievements.Where(u => u.UserID == uid);
+
+            return PartialView("_IndexAchievements", await userAchievements.ToListAsync());
         }
 
         public ActionResult About()
